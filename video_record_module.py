@@ -43,12 +43,7 @@ def get_video_type(filename):
       return  VIDEO_TYPE[ext]
     return VIDEO_TYPE['avi']
 
-def video_record(video_filename, audio_filename, video_length):
-    # It looks like we always need to delete the wav file first or else there will be some problems with over-writing the sound file
-    if os.path.exists(video_filename):
-        os.remove(video_filename)
-    if os.path.exists(audio_filename):
-        os.remove(audio_filename)
+def video_record(video_filename, audio_filename, video_length, combine_filename):
 
     cap = cv2.VideoCapture(0) #Here we assume index 0 is the webcam
     fps=30 #webcam defaults to 30 fps (even though cv2.VideoWriter uses 24 fps)
@@ -57,7 +52,7 @@ def video_record(video_filename, audio_filename, video_length):
     frames_recorded = 0
 
     #we start audio recording thread here
-    audio_thread = threading.Thread(target=audio_record, args=(audio_filename, video_length))
+    audio_thread = threading.Thread(target=audio_record, args=(video_filename, audio_filename, video_length, combine_filename))
     audio_thread.start()
 
     while frames_recorded < total_frames:
@@ -69,4 +64,8 @@ def video_record(video_filename, audio_filename, video_length):
     cap.release()
     out.release()
     #cv2.destroyAllWindows()
+
+    #wait for audio thread is done
+    audio_thread.join()  
+
     print("done video taping!")

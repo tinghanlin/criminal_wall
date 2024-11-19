@@ -16,7 +16,7 @@ def callback(indata, frames, time, status):
         print ("recording error: ", status)
     recorded_audio.append(indata.copy())
 
-def audio_record(filename, audio_length):
+def audio_record(video_filename, audio_filename, audio_length, combine_filename):
     global recorded_audio
     #Uncomment below if you want to see the list of all available audio devices
     #print(sd.query_devices())
@@ -54,7 +54,7 @@ def audio_record(filename, audio_length):
     audio_data = recorded_audio.flatten()
 
     #save audio to file
-    write(filename, audio_sample_rate, audio_data)
+    write(audio_filename, audio_sample_rate, audio_data)
 
     #wait for video mp4 file to be generated
     time.sleep(1)
@@ -63,22 +63,16 @@ def audio_record(filename, audio_length):
     command = [
         "ffmpeg",
         "-y",
-        "-i", "video_1.mp4",
-        "-i", "audio_1.wav",
+        "-i", video_filename,
+        "-i", audio_filename,
         "-c:v", "copy",        
         "-c:a", "aac",
-        "combined_1.mp4"
+        combine_filename
     ]
 
     # Run the command
     subprocess.run(command, check=True)
-    # video_clip = VideoFileClip("video_1.mp4")
-    # audio_clip = AudioFileClip("audio_1.wav")
-
-    # #combined_video = video_clip.set_audio(audio_clip)
-    # #combined_video.ipython_display() 
-    # video_clip.write_videofile("combined_0.mp4", temp_audiofile=audio_clip, remove_temp=True, codec="libx264", audio_codec="aac")
-    # #combined_video.write_videofile("combined_0.mp4", codec="libx264")
+    recorded_audio = []
 
 
 
