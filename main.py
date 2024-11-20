@@ -7,7 +7,7 @@ import time
 counter = 1
 video_filename = "video_"+str(counter)+".mp4" #typically people use .avi or .mp4 file
 audio_filename = "audio_"+str(counter)+".wav"
-video_length = 5
+video_length = 2
 combine_filename = "combined_"+str(counter)+".mp4"
 recorded_audio = []
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     if os.path.exists(combine_filename):
         os.remove(combine_filename)
 
-    for i in range(5): #record 5 clips
+    for i in range(74): #record 5 clips
         video_record(video_filename, audio_filename, video_length, combine_filename)
         counter +=1
     
