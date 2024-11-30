@@ -5,6 +5,7 @@ import os
 import cv2
 from scipy.io.wavfile import write
 from audio_record_module import audio_record
+from silence_detection_module import slience_remove
 import threading
 
 # Set resolution for the video capture
@@ -66,6 +67,10 @@ def video_record(video_filename, audio_filename, video_length, combine_filename)
     #cv2.destroyAllWindows()
 
     #wait for audio thread is done
-    audio_thread.join()  
+    audio_thread.join()
 
     print("done video taping!")
+
+    #call silence remove
+    #TODO: adjust these thresholds if needed!!!!
+    slience_remove(combine_filename, "-30dB", "0.1", 2.0)
