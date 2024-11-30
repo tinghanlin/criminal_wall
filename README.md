@@ -4,6 +4,9 @@
 
 ![Frame 3](https://github.com/user-attachments/assets/4132f19f-08e4-4cc5-9674-b0a9dd712781)
 
+## Finetune and Troubleshoot
+### main.py
+
 ## What to Install?
 
 To run this project, you might need to install the following tools.
