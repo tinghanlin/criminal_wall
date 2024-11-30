@@ -10,6 +10,10 @@
 - **video_length**: how many seconds we are recording for each clip
 - **number_of_clips**: how many clips we are recording per time in a sequence
 
+### video_record_module.py
+- **silence_threshold**: determine what counts as silence. For example, -30dB means we consider anything below -30dB as silence. In a noisy environment, we can potentially increase this threshold to a higher level like -25dB.
+- **silence_duration**: determine the minimal length of silence. For example, 0.1 means we only consider segments that are longer than 0.1 seconds as a silent segment.
+
 ## What to Install?
 
 To run this project, you might need to install the following tools.
