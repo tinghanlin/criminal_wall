@@ -10,6 +10,9 @@
 - **video_length**: how many seconds we are recording for each clip
 - **number_of_clips**: how many clips we are recording per time in a sequence
 
+### audio_record_module.py
+- `sd.default.device = #`: during audio recording, sounddevice in Python will just choose a default microphone (usually MacBook's microphone is the default). If you want to change the source of the microphone, you can first `print(sd.query_devices())` and set `sd.default.device = #` to the index of that source of microphone.
+  
 ### video_record_module.py
 - **camera_index**: determine which camera to record. For example, 0 usually mean webcam for a MacBook.
 - **silence_threshold**: determine what counts as silence. For example, -30dB means we consider anything below -30dB as silence. In a noisy environment, we can potentially increase this threshold to a higher level like -25dB.
