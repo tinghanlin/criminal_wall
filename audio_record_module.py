@@ -18,8 +18,13 @@ def callback(indata, frames, time, status):
 
 def audio_record(video_filename, audio_filename, audio_length, combine_filename):
     global recorded_audio
+    
+    ###TODO: we might want to adjust these in the future###
     #Uncomment below if you want to see the list of all available audio devices
     #print(sd.query_devices())
+    # sd.default.device = 1 #1 is the index
+    ###TODO: we might want to adjust these in the future###
+
     audio_sample_rate = 48000
     stream = sd.InputStream(callback=callback, dtype = "float32", samplerate=audio_sample_rate, channels=1)
     stream.start()
