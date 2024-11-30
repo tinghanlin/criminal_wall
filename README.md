@@ -5,7 +5,10 @@
 ![Frame 3](https://github.com/user-attachments/assets/4132f19f-08e4-4cc5-9674-b0a9dd712781)
 
 ## Finetune and Troubleshoot
+
 ### main.py
+- **video_length**: how many seconds we are recording for each clip
+- **number_of_clips**: how many clips we are recording per time in a sequence
 
 ## What to Install?
 
