@@ -1,14 +1,14 @@
-#Reference for retrieving the output of subprocess.call() in Python: https://www.geeksforgeeks.org/retrieving-the-output-of-subprocesscall-in-python/
-#Reference for Python RegEx: https://www.w3schools.com/python/python_regex.asp#findall
-#Reference for truncating video using ffmpeg: https://stackoverflow.com/questions/18444194/cutting-multimedia-files-based-on-start-and-end-time-using-ffmpeg
-#Reference for removing the silent parts of a video using ffmpeg and python: https://www.youtube.com/watch?v=ak52RXKfDw8
-#Reference for concatenating video using ffmpeg: https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg
+#Reference: https://www.geeksforgeeks.org/retrieving-the-output-of-subprocesscall-in-python/
+#Reference: https://www.w3schools.com/python/python_regex.asp#findall
+#Reference: https://stackoverflow.com/questions/18444194/cutting-multimedia-files-based-on-start-and-end-time-using-ffmpeg
+#Reference: https://www.youtube.com/watch?v=ak52RXKfDw8
+#Reference: https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg
 
 import subprocess
 import re
 
 #Example running this function: slience_remove("combined_1.mp4", "-25dB", "0.2", 2.0)
-def slience_remove(video_filename, silence_threshold, silence_duration, our_recording_length):
+def slience_remove(video_filename, silence_threshold, silence_duration, video_length):
 
     command = [
         "ffmpeg",
@@ -42,15 +42,15 @@ def slience_remove(video_filename, silence_threshold, silence_duration, our_reco
     number_of_silence_segments = len(silence_start_time_array_float) #silence_start_time_array_float and silence_end_time_array_float have the same length
 
     voice_start_time_array_float = [] #stores start time for voice
-    voice_end_time_array_float = [] ##stores end time for voice
+    voice_end_time_array_float = [] #stores end time for voice
 
     if number_of_silence_segments == 0:
         print("Case 0 (no silence), we output the original video")
         voice_start_time_array_float.append(0.0)
-        voice_end_time_array_float.append(our_recording_length)
+        voice_end_time_array_float.append(video_length)
     else:
 
-        if silence_start_time_array_float[0] == 0.0 and silence_end_time_array_float[number_of_silence_segments-1] >= our_recording_length:
+        if silence_start_time_array_float[0] == 0.0 and silence_end_time_array_float[number_of_silence_segments-1] >= video_length:
             print("Case 1 (there is silence at the beginning and at the end of the video): we can just keep the voice intervals")
             for i in range(number_of_silence_segments-1):
                 voice_start_time_array_float.append(silence_end_time_array_float[i])
@@ -63,9 +63,9 @@ def slience_remove(video_filename, silence_threshold, silence_duration, our_reco
                 voice_end_time_array_float.append(silence_start_time_array_float[i+1])
             
             voice_start_time_array_float.append(silence_end_time_array_float[number_of_silence_segments-1])
-            voice_end_time_array_float.append(our_recording_length)
+            voice_end_time_array_float.append(video_length)
 
-        elif silence_end_time_array_float[number_of_silence_segments-1] >= our_recording_length:
+        elif silence_end_time_array_float[number_of_silence_segments-1] >= video_length:
             print("Case 3 (one silent segment is at the end of the video): we can keep the voice intervals and add the beginning voice")
             voice_start_time_array_float.append(0.0)
             voice_end_time_array_float.append(silence_start_time_array_float[0])
@@ -85,7 +85,7 @@ def slience_remove(video_filename, silence_threshold, silence_duration, our_reco
                 voice_end_time_array_float.append(silence_start_time_array_float[i+1])
             
             voice_start_time_array_float.append(silence_end_time_array_float[number_of_silence_segments-1])
-            voice_end_time_array_float.append(our_recording_length)
+            voice_end_time_array_float.append(video_length)
 
     print("voice_start_time_array_float: ", voice_start_time_array_float)
     print("voice_end_time_array_float: ", voice_end_time_array_float)
@@ -118,7 +118,7 @@ def slience_remove(video_filename, silence_threshold, silence_duration, our_reco
     voice_file_names = [] #this is used when there exists multiple voice segments
 
     for i in range(number_of_voice_segments):
-        temp_file_name = f"{video_filename[:-4]}_no_silence_{str(i)}.mp4"
+        temp_file_name = f"{video_filename[:-4]}_no_silence_{str(i)}.mp4" # -4 is there to remove .mp4 (4 characters)
         command2 = [
             "ffmpeg",
             "-y",
@@ -134,11 +134,11 @@ def slience_remove(video_filename, silence_threshold, silence_duration, our_reco
 
         subprocess.run(command2, check=True)
 
-    #if there are multiple voice segments, we can concatenate them together
-    #if there is only one, we just concatenate the same file
+    #if there are multiple voice segments, we concatenate them together
+    #if there is only one, we just concatenate the same file (ie basically just rename the file)
 
     FILENAME = "voice_file_names.txt"
-    CONCAT_FILENAME = f"{video_filename[:-4]}_no_silence_concat.mp4"
+    CONCAT_FILENAME = f"{video_filename[:-4]}_no_silence_concat.mp4" # -4 is there to remove .mp4 (4 characters)
     print(CONCAT_FILENAME)
     with open(FILENAME, "w") as f:
         for file_name in voice_file_names:
