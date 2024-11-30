@@ -46,7 +46,11 @@ def get_video_type(filename):
 
 def video_record(video_filename, audio_filename, video_length, combine_filename):
 
-    cap = cv2.VideoCapture(0) #Here we assume index 0 is the webcam
+    ###TODO: we might want to adjust these in the future###
+    camera_index = 0 #Here we assume index 0 is the webcam
+    ###TODO: we might want to adjust these in the future###
+    cap = cv2.VideoCapture(camera_index)
+
     fps=30 #webcam defaults to 30 fps (even though cv2.VideoWriter uses 24 fps)
     out = cv2.VideoWriter(video_filename, get_video_type(video_filename), fps, get_dims(cap))
     total_frames = int(video_length * fps)
