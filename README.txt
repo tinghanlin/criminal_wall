@@ -7,3 +7,5 @@ I can't get the gif to play in the background if text is overlaid on it
 
 basicstruct is to show what the gifs should look like. 
 
+Anyway - there are just 3 example slides now but the words can all be listed in 
+once the text overlay issue is fixed. Likewise, we can put diff mp4 files in for the last pages
