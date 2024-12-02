@@ -133,6 +133,10 @@ class DissonanceApp(QWidget):
         self.current_unit_index += 1
         self.show_unit_page_with_gif(words, completion_callback)
 
+    def show_wait_page(self):
+        self.clear_layout()
+        self.set_background("background_wait.png")
+        self.add_transparent_button(self.play_video)
 
     def play_video(self, video_path, callback):
         """Play video using OpenCV."""
@@ -213,3 +217,4 @@ if __name__ == "__main__":
     window = DissonanceApp()
     window.show()
     sys.exit(app.exec())
+
