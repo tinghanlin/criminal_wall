@@ -12,6 +12,7 @@ import datetime
 
 
 #start the timer
+#add
 
 def concat_with_ffmpeg(video_paths, output_path):
     try:
