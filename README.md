@@ -17,6 +17,16 @@
 - **camera_index**: determine which camera to record. For example, 0 usually mean webcam for a MacBook.
 - **silence_threshold**: determine what counts as silence. For example, -30dB means we consider anything below -30dB as silence. In a noisy environment, we can potentially increase this threshold to a higher level like -25dB.
 - **silence_duration**: determine the minimal length of silence. For example, 0.1 means we only consider segments that are longer than 0.1 seconds as a silent segment.
+### PSA VIDEO - status
+I know Blaze wanted us experiment with deep fakes So I coded the PSA to include the "user's voice" Using an AI cloning package but on my computer in order to get the cloning package to work I had to downgrade to python 3.9 ( it says on the website it works with python 3.11 but I'm unsure if it's only 3.11 0  it wouldn't work with my Python and I'm on 3.11.0) Which required me to downgrade movie.py.
+(PSA.py  (Verson with deep fake)- runs on python 3.9)
+(PSA_no_words.py(Verson with no deep fake) - runs on python 3.11.5)
+in terms of storage (All things saved in the main directory (where the raw videos went) Can be deleted after each user )
+Everything stored in the psa/ folder should be kept, that's where we store the multiple users in order to create the grid effect.
+in the end I used movie.py has it was easier to do the grid and provided two different scale versions let me know if I should switch to ffmpeg 
+The speed even with all the additions on my computer was about the same because it was before all the changes I made to Tommy's code so I assume it should still run at the same speed.
+
+
 
 ## What to Install?
 
