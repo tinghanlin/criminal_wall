@@ -53,31 +53,37 @@ class DissonanceApp(QWidget):
 
     def clear_layout(self):
         """Clear layout while keeping background."""
-        while self.main_layout.count():
-            widget = self.main_layout.takeAt(0).widget()
+        # Remove any widgets that have been dynamically added (text labels, etc.)
+        for label in self.dynamic_labels:
+            label.deleteLater()  # This removes the widget from the layout and memory
+        self.dynamic_labels.clear()  # Clear the list of dynamic labels
+
+        # Manually clear other layout widgets if necessary, like buttons
+        for i in reversed(range(self.main_layout.count())):
+            widget = self.main_layout.itemAt(i).widget()
             if widget is not None:
-                widget.deleteLater()
+                widget.deleteLater()  # Remove widget from layout
 
     # Pages
     def show_welcome_page(self):
         self.clear_layout()
-        self.set_background("background_welcome.png")
+        self.set_background("background_welcome_new.png")
         self.add_transparent_button(self.show_instructions_page)
 
     def show_instructions_page(self):
         self.clear_layout()
-        self.set_background("background_instructions.png")
+        self.set_background("background_instructions_new.png")
         self.add_transparent_button(self.show_audio_instructions_page)
 
     def show_audio_instructions_page(self):
         self.clear_layout()
-        self.set_background("background_audio.png")
+        self.set_background("background_audio_new.png")
         self.add_transparent_button(self.start_practice_units)
 
     def start_practice_units(self):
         """Start practice units with gif background."""
         self.current_unit_index = 0
-        self.show_unit_page_with_gif(self.practice_words, self.finish_practice_units)
+        self.show_unit_page_with_gif(self.practice_words, self.finish_practice_units, is_practice_round=True)
 
     def finish_practice_units(self):
         """Finish practice units and show transition page."""
@@ -88,13 +94,46 @@ class DissonanceApp(QWidget):
     def start_test_units(self):
         """Start test units with gif background."""
         self.current_unit_index = 0
-        self.show_unit_page_with_gif(self.test_words, self.show_wait_page)
+        self.show_unit_page_with_gif(self.test_words, self.show_wait_page, is_practice_round=False)
 
-    def show_unit_page_with_gif(self, words, completion_callback):
-        """Show a single gif page."""
-        self.clear_layout()
+    def show_unit_page_with_gif(self, words, completion_callback, is_practice_round=True):
+        """Show a single gif page with specific indicators for practice or test rounds."""
+        self.clear_layout()  # Clear any previous widgets to avoid overlapping content
         self.set_background("bgfullnew.gif")
 
+        # Show "Practice Round X" only for practice rounds
+        if is_practice_round:
+            # Determine the current practice round based on current_unit_index
+            practice_round = self.current_unit_index + 1  # Add 1 to start at "Practice Round 1"
+
+            # Create the practice round label
+            round_label = QLabel(f"Practice Round {practice_round}", self)
+            round_label.setFont(QFont("Soleil", 16, QFont.Weight.Bold))  # Set font and size
+            round_label.setStyleSheet("color: blue;")  # Set the text color to blue
+            round_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)  # Align top-left
+            round_label.setGeometry(10, 10, 200, 40)  # Position the label at the upper-left corner
+            round_label.show()
+
+            # Add it to the dynamic_labels list so it can be cleared later
+            self.dynamic_labels.append(round_label)
+
+        # Show "Speak the word..." only for test rounds
+        if not is_practice_round:
+            speak_text = (
+                '<p style="font-family:Soleil; font-size: 18px; color: grey;">'
+                'Speak the <span style="color: blue;">word</span> that you see out loud.'
+                '</p>'
+            )
+            speak_label = QLabel(speak_text, self)
+            speak_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            speak_label.setGeometry(0, self.height() // 2 + 100, self.width(), 50)  # Position it below the word
+            speak_label.setWordWrap(True)  # Allow wrapping for longer text
+            speak_label.show()
+
+            # Add it to the dynamic_labels list so it can be cleared later
+            self.dynamic_labels.append(speak_label)
+
+        # Show the current word (existing functionality)
         if self.current_unit_index < len(words):
             word = words[self.current_unit_index]
         else:
@@ -105,25 +144,33 @@ class DissonanceApp(QWidget):
         word_label.setText(word)
         word_label.setFont(QFont("Soleil", 36, QFont.Weight.Bold))
         word_label.setStyleSheet("""
-            color: darkgray;  /* Text color */
-            background-color: rgba(0, 0, 0, 0);  /* Fully transparent background */
+            color: darkgray;
+            background-color: rgba(0, 0, 0, 0);
         """)
         word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         word_label.setGeometry(0, self.height() // 2 - 50, self.width(), 100)
         word_label.show()
-        self.main_layout.addWidget(word_label)
 
-        self.start_timer(3, lambda: self.show_next_word(words, completion_callback))
+        # Add it to the dynamic_labels list so it can be cleared later
+        self.dynamic_labels.append(word_label)
 
-    def show_next_word(self, words, completion_callback):
+        # Start the timer to move to the next word
+        self.start_timer(4, lambda: self.show_next_word(words, completion_callback, is_practice_round))
+
+    def show_next_word(self, words, completion_callback, is_practice_round):
         """Show the next word in the list."""
         self.current_unit_index += 1
-        self.show_unit_page_with_gif(words, completion_callback)
+        # Check if we are still within the range of words
+        if self.current_unit_index < len(words):
+            self.show_unit_page_with_gif(words, completion_callback, is_practice_round)
+        else:
+            # End of the current round, call the completion callback
+            completion_callback()
 
     def show_wait_page(self):
         """Display the wait page before playing the videos."""
         self.clear_layout()
-        self.set_background("background_wait.png")
+        self.set_background("background_wait_new.png")
         self.add_transparent_button(self.show_result_video)
 
     def play_video(self, video_path, callback):
@@ -164,9 +211,14 @@ class DissonanceApp(QWidget):
         self.clear_layout()
         self.set_background("finalpg.png")
 
-    # Helpers
     def set_background(self, path):
         """Set background."""
+        # Stop and clear the current background movie, if any
+        if isinstance(self.current_bg, QMovie):
+            self.current_bg.stop()
+            self.bg_label.clear()
+            self.current_bg = None
+
         if path.endswith(".gif"):
             movie = QMovie(path)
             movie.setScaledSize(self.size())
