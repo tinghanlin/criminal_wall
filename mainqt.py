@@ -1,6 +1,6 @@
 
 
-# required: PyQt6 & opencv-python
+# required: PyQt6 & opencv-python & VLC
 
 import sys
 import cv2
@@ -197,6 +197,9 @@ class DissonanceApp(QWidget):
 
 
 
+
+
+
     #VERISION WITH QUICKTIME PLAYER FULL SCREEN
 
     # def show_result_video(self):
@@ -222,23 +225,31 @@ class DissonanceApp(QWidget):
 
     # VERSION with FULL SCREEN  VLC
 
-    # # def open_video_in_fullscreen(self, video_path):
-    # #     """Open the video in full screen with an external player."""
-    # #     import subprocess
-    # #     try:
-    # #         subprocess.run(["vlc", "--fullscreen", video_path], check=True)
-    # #     except FileNotFoundError:
-    # #         print("Error: VLC media player is not installed or not in your system PATH.")
+# version with text on screen
     def open_video(self, video_path):
-        """Open video in VLC media player in fullscreen mode."""
+        """Open video in VLC media player in fullscreen and pause at the last frame."""
         try:
-            # Specify the VLC binary path if necessary (adjust if VLC is not in PATH)
-            vlc_path = "/Applications/VLC.app/Contents/MacOS/VLC"  # macOS VLC path
-            subprocess.Popen([vlc_path, "--fullscreen", video_path])
+            vlc_path = "/Applications/VLC.app/Contents/MacOS/VLC" #replace path wherever we r playing from
+            # Open VLC in fullscreen mode and pause at the last frame
+            subprocess.Popen([vlc_path, "--fullscreen", "--play-and-pause", video_path])
         except FileNotFoundError:
-            print("Error: VLC media player is not installed or the specified path is incorrect.")
+            print("Error: VLC media player is not installed or path is incorrect.")
         except Exception as e:
             print(f"Error opening video {video_path} with VLC: {e}")
+
+    def open_video(self, video_path):
+        """Open video in VLC media player in fullscreen without showing the title and pause at the last frame."""
+        try:
+            vlc_path = "/Applications/VLC.app/Contents/MacOS/VLC"  # Path to VLC binary
+            # Open VLC in fullscreen, pause at the last frame, and disable the title display
+            subprocess.Popen([vlc_path, "--fullscreen", "--play-and-pause", "--no-video-title-show", video_path])
+        except FileNotFoundError:
+            print("Error: VLC media player is not installed or path is incorrect.")
+        except Exception as e:
+            print(f"Error opening video {video_path} with VLC: {e}")
+
+
+
 
 
     def show_final_page(self):
