@@ -4,7 +4,7 @@
 # in order to run - replace practice and test words with full list
 # insert path to your VLC within the open_video function
 # that should work! 
-# notes: final video and message must be ONE mp4 file. 
+# notes: final video and message must be ONE mp4 file. (results.mp4)
 # things to fix: update hanes gif for waiting page
 
 
@@ -177,7 +177,7 @@ class DissonanceApp(QWidget):
     def show_wait_page(self):
         """Display the wait page before playing the videos."""
         self.clear_layout()
-        self.set_background("background_wait_new.png")
+        self.set_background("background_wait.gif")
         self.add_transparent_button(self.show_result_video)
 
 
