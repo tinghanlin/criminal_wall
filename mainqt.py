@@ -1,6 +1,12 @@
 
 
-# required: PyQt6 & opencv-python & VLC
+# required: PyQt6 & VLC
+# in order to run - replace practice and test words with full list
+# insert path to your VLC within the open_video function
+# that should work! 
+# notes: final video and message must be ONE mp4 file. 
+# things to fix: update hanes gif for waiting page
+
 
 import sys
 import cv2
@@ -226,17 +232,19 @@ class DissonanceApp(QWidget):
     # VERSION with FULL SCREEN  VLC
 
 # version with text on screen
-    def open_video(self, video_path):
-        """Open video in VLC media player in fullscreen and pause at the last frame."""
-        try:
-            vlc_path = "/Applications/VLC.app/Contents/MacOS/VLC" #replace path wherever we r playing from
-            # Open VLC in fullscreen mode and pause at the last frame
-            subprocess.Popen([vlc_path, "--fullscreen", "--play-and-pause", video_path])
-        except FileNotFoundError:
-            print("Error: VLC media player is not installed or path is incorrect.")
-        except Exception as e:
-            print(f"Error opening video {video_path} with VLC: {e}")
+    # def open_video(self, video_path):
+    #     """Open video in VLC media player in fullscreen and pause at the last frame."""
+    #     try:
+    #         vlc_path = "/Applications/VLC.app/Contents/MacOS/VLC" #replace path wherever we r playing from
+    #         # Open VLC in fullscreen mode and pause at the last frame
+    #         subprocess.Popen([vlc_path, "--fullscreen", "--play-and-pause", video_path])
+    #     except FileNotFoundError:
+    #         print("Error: VLC media player is not installed or path is incorrect.")
+    #     except Exception as e:
+    #         print(f"Error opening video {video_path} with VLC: {e}")
 
+
+# no text on screen
     def open_video(self, video_path):
         """Open video in VLC media player in fullscreen without showing the title and pause at the last frame."""
         try:
@@ -252,10 +260,10 @@ class DissonanceApp(QWidget):
 
 
 
-    def show_final_page(self):
-        """Display the final page and keep it until the program is exited"""
-        self.clear_layout()
-        self.set_background("finalpg.png")
+    # def show_final_page(self):
+    #     """Display the final page and keep it until the program is exited"""
+    #     self.clear_layout()
+    #     self.set_background("finalpg.png")
 
     def set_background(self, path):
         """Set background."""
