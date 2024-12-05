@@ -14,13 +14,12 @@ deactivate
 
 ## System Overview
 
-![Frame 3](https://github.com/user-attachments/assets/4132f19f-08e4-4cc5-9674-b0a9dd712781)
+![Frame 3 (1)](https://github.com/user-attachments/assets/635a40f0-92b3-4670-aa2f-ac17ec1c2efe)
 
 ## Finetune and Troubleshoot
 
-### main.py
-- **video_length**: how many seconds we are recording for each clip
-- **number_of_clips**: how many clips we are recording per time in a sequence
+### gui_module.py
+- **self.video_length**: how many seconds we are recording for each clip
 
 ### audio_record_module.py
 - `sd.default.device = #`: during audio recording, sounddevice in Python will just choose a default microphone (usually MacBook's microphone is the default). If you want to change the source of the microphone, you can first `print(sd.query_devices())` and set `sd.default.device = #` to the index of that source of microphone.
@@ -29,6 +28,7 @@ deactivate
 - **camera_index**: determine which camera to record. For example, 0 usually mean webcam for a MacBook.
 - **silence_threshold**: determine what counts as silence. For example, -30dB means we consider anything below -30dB as silence. In a noisy environment, we can potentially increase this threshold to a higher level like -50dB.
 - **silence_duration**: determine the minimal length of silence. For example, 0.1 means we only consider segments that are longer than 0.1 seconds as a silent segment.
+
 ### PSA VIDEO - status
 I know Blaze wanted us experiment with deep fakes So I coded the PSA to include the "user's voice" Using an AI cloning package but on my computer in order to get the cloning package to work I had to downgrade to python 3.9 ( it says on the website it works with python 3.11 but I'm unsure if it's only 3.11 0  it wouldn't work with my Python and I'm on 3.11.0) Which required me to downgrade movie.py.
 (PSA.py  (Verson with deep fake)- runs on python 3.9)
@@ -42,12 +42,17 @@ The speed even with all the additions on my computer was about the same because 
 
 ## What to Install?
 
-To run this project, you might need to install the following tools.
+To run this project, you might need to install the following tools in the 
 
 - FFMpeg (this is a command line tool, follow this [video](https://www.youtube.com/watch?v=JSrIABa0IwY) if you haven't installed)
-- Third-party Python libraries (``pip install numpy opencv-python scipy sounddevice``)
+- Third-party Python libraries (``pip install numpy opencv-python scipy sounddevice pyqt6``)
+- VLC video player
 
 ## References
+
+### gui_module.py
+- [How to use PyQt's QThread to Prevent Freezing GUIs?](https://realpython.com/python-pyqt-qthread/)
+- [How to create your first app with PyQt6](https://www.pythonguis.com/tutorials/pyqt6-creating-your-first-window/)
 
 ### audio_record_module.py
 
