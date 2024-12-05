@@ -1,5 +1,17 @@
 # criminal_wall
 
+## How to run the code using the virtual environment?
+
+Navigate to `criminal_wall` folder, and run the following code:
+```python
+source venv/bin/activate
+python3 main.py [user name]
+```
+Once you are done, you can deactivate the venv by running the following command
+```python
+deactivate
+```
+
 ## System Overview
 
 ![Frame 3](https://github.com/user-attachments/assets/4132f19f-08e4-4cc5-9674-b0a9dd712781)
