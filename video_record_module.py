@@ -77,7 +77,7 @@ def video_record(video_filename, audio_filename, video_length, combine_filename)
 
     #call silence remove
     ###TODO: we might want to adjust these in the future###
-    silence_threshold = "-30dB"
+    silence_threshold = "-35dB"
     silence_duration = "0.1"
     ###TODO: we might want to adjust these in the future###
     slience_remove(combine_filename, silence_threshold, silence_duration, video_length)

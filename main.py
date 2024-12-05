@@ -1,34 +1,38 @@
-from video_record_module import video_record
+#run: python3 main.py [user name]
+#example: python3 main.py timmy
+from gui_module import CriminalWall
 import os
 import sounddevice as sd
 import time
-
-###TODO: we might want to adjust these in the future###
-video_length = 2 # in seconds
-number_of_clips = 50
-###TODO: we might want to adjust these in the future###
-
-counter = 1
-video_filename = "new_video_"+str(counter)+".mp4" #typically people use .avi or .mp4 file
-audio_filename = "new_audio_"+str(counter)+".wav"
-combine_filename = "new_combined_"+str(counter)+".mp4"
-recorded_audio = []
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout
+import sys
+import glob
+import shutil
 
 if __name__ == "__main__":
-    # It looks like we always need to delete the wav file first or else there will be some problems with over-writing the sound file
-    if os.path.exists(video_filename):
-        os.remove(video_filename)
-    if os.path.exists(audio_filename):
-        os.remove(audio_filename)
-    if os.path.exists(combine_filename):
-        os.remove(combine_filename)
+    #delete some files
+    #TODO: implement a way to delete files
+    # for file in glob.glob("new_*"): 
+    #     os.remove(file)
 
-    for i in range(number_of_clips):
-        video_record(video_filename, audio_filename, video_length, combine_filename)
-        counter +=1
-    
-        video_filename = "new_video_"+str(counter)+".mp4"
-        audio_filename = "new_audio_"+str(counter)+".wav"
-        combine_filename = "new_combined_"+str(counter)+".mp4"
+    user_name = sys.argv[1]
+
+
+    #delete an exisiting user folder
+    if os.path.exists(user_name):
+        shutil.rmtree(user_name)
+       
+    #create a new user folder
+    os.makedirs(user_name)
+
+    #start the GUI
+    app = QApplication(sys.argv)
+    window = CriminalWall(sys.argv)
+    window.show()
+    sys.exit(app.exec())
 
     
+
+    
+    
+
