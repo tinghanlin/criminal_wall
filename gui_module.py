@@ -203,7 +203,7 @@
 #     def show_unit_page_with_gif(self, words, completion_callback, is_practice_round=True):
 #         """Show a single gif page with specific indicators for practice or test rounds."""
 #         self.clear_layout()  # Clear any previous widgets to avoid overlapping content
-#         self.set_background("bgfullnew.gif")
+#         self.set_background("bgfullv3.gif")
 
 #         # showing "Practice Round __" ONLY for practice rounds
 #         if is_practice_round:
@@ -514,7 +514,7 @@ class CriminalWall(QWidget):
     def show_unit_page_with_gif(self, words, completion_callback, is_practice_round=True):
         """Show a single gif page with specific indicators for practice or test rounds."""
         self.clear_layout()
-        self.set_background("bgfullnew.gif")
+        self.set_background("bgfullv3.gif")
 
         if is_practice_round:
             practice_round = self.current_unit_index + 1
