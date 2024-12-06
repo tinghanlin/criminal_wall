@@ -366,7 +366,7 @@
 #         self.combine_filename = self.user_name+"/new_combined_"+str(self.counter)+".mp4"
         
 
-# ADJUSTED SCRIPT BY CHARLOTTE FOR HER COMPUTER
+# ADJUSTED SCRIPT BY CHARLOTTE FOR HER COMPUTER & FULL SCREEN
 
 import sys
 import cv2
@@ -416,7 +416,6 @@ class CriminalWall(QWidget):
         super().__init__()
         self.setWindowTitle("Criminal Wall")
         self.user_name = args[1]
-        self.setFixedSize(600, 400)
 
         # Fonts
         self.title_font = QFont("Soleil", 60, QFont.Weight.Bold)
@@ -446,6 +445,9 @@ class CriminalWall(QWidget):
         self.test_words = ["A", "E", "I", "O", "U"]
         self.current_unit_index = 0
 
+        # Open in full screen
+        self.showFullScreen()
+
         self.show_welcome_page()
 
     def resizeEvent(self, event):
@@ -456,7 +458,7 @@ class CriminalWall(QWidget):
         elif isinstance(self.current_bg, QPixmap):
             self.bg_label.setPixmap(self.current_bg.scaled(
                 self.size(),
-                Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                Qt.AspectRatioMode.IgnoreAspectRatio,  # Fill the screen
                 Qt.TransformationMode.SmoothTransformation
             ))
         super().resizeEvent(event)
@@ -601,7 +603,7 @@ class CriminalWall(QWidget):
                 return
             pixmap = pixmap.scaled(
                 self.size(),
-                Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                Qt.AspectRatioMode.IgnoreAspectRatio,  # Fill the screen
                 Qt.TransformationMode.SmoothTransformation
             )
             self.bg_label.setPixmap(pixmap)
