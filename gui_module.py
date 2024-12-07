@@ -463,7 +463,6 @@ class CriminalWall(QWidget):
                 Qt.AspectRatioMode.IgnoreAspectRatio,  # Fill the screen
                 Qt.TransformationMode.SmoothTransformation
             ))
-        print(f"Window size: {self.size()}, bg_label size: {self.bg_label.size()}")
         super().resizeEvent(event)
 
     def clear_layout(self):

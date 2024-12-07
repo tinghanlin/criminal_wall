@@ -13,7 +13,7 @@ python3 main.py [user name]
 
 You might need to install some python packages. If so, you can run the following code:
 ```python
-pip3 install numpy opencv-python scipy sounddevice pyqt6
+pip3 install numpy opencv-python scipy sounddevice pyqt6 moviepy==1.0.3
 ```
 
 Once you are done, you can deactivate the venv by running the following command
@@ -52,7 +52,7 @@ The speed even with all the additions on my computer was about the same because 
 To run this project, you might need to install the following tools in the 
 
 - FFMpeg
-- Third-party Python libraries (e.g., ``pip3 install numpy opencv-python scipy sounddevice pyqt6``)
+- Third-party Python libraries (e.g., ``pip3 install numpy opencv-python scipy sounddevice pyqt6 moviepy==1.0.3``)
 - VLC video player
 
 ## References
