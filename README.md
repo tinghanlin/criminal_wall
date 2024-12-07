@@ -2,11 +2,20 @@
 
 ## How to run the code using the virtual environment?
 
-Navigate to `criminal_wall` folder, and run the following code:
+Navigate to `criminal_wall` folder, and delete and recreate a venv by running the following code:
 ```python
+rm -rf venv
+python3 -m venv venv
+
 source venv/bin/activate
 python3 main.py [user name]
 ```
+
+You might need to install some python packages. If so, you can run the following code:
+```python
+pip3 install numpy opencv-python scipy sounddevice pyqt6
+```
+
 Once you are done, you can deactivate the venv by running the following command
 ```python
 deactivate
@@ -38,14 +47,12 @@ Everything stored in the psa/ folder should be kept, that's where we store the m
 in the end I used movie.py has it was easier to do the grid and provided two different scale versions let me know if I should switch to ffmpeg 
 The speed even with all the additions on my computer was about the same because it was before all the changes I made to Tommy's code so I assume it should still run at the same speed.
 
-
-
 ## What to Install?
 
 To run this project, you might need to install the following tools in the 
 
-- FFMpeg (this is a command line tool, follow this [video](https://www.youtube.com/watch?v=JSrIABa0IwY) if you haven't installed)
-- Third-party Python libraries (``pip3 install numpy opencv-python scipy sounddevice pyqt6``)
+- FFMpeg
+- Third-party Python libraries (e.g., ``pip3 install numpy opencv-python scipy sounddevice pyqt6``)
 - VLC video player
 
 ## References
