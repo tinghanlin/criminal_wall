@@ -429,7 +429,7 @@ class CriminalWall(QWidget):
         self.bg_label = QLabel(self)
         self.bg_label.setGeometry(0, 0, self.width(), self.height())
         self.bg_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        
         self.dynamic_labels = []
         self.current_bg = None
 
@@ -442,17 +442,19 @@ class CriminalWall(QWidget):
 
         # Words for practice and testing
         self.practice_words = ["Bath", "Car", "Think"]
-        self.test_words = ["A", "E", "I", "O", "U"]
+        self.test_words = ["A", "B", "C"]
         self.current_unit_index = 0
 
         # Open in full screen
         self.showFullScreen()
+        self.setFixedSize(self.width(), self.height())
 
         self.show_welcome_page()
 
     def resizeEvent(self, event):
         """Handle window resize to ensure background scales."""
         self.bg_label.setGeometry(0, 0, self.width(), self.height())
+        
         if isinstance(self.current_bg, QMovie):
             self.current_bg.setScaledSize(self.size())
         elif isinstance(self.current_bg, QPixmap):
@@ -461,6 +463,7 @@ class CriminalWall(QWidget):
                 Qt.AspectRatioMode.IgnoreAspectRatio,  # Fill the screen
                 Qt.TransformationMode.SmoothTransformation
             ))
+        print(f"Window size: {self.size()}, bg_label size: {self.bg_label.size()}")
         super().resizeEvent(event)
 
     def clear_layout(self):
