@@ -45,7 +45,7 @@ The speed even with all the additions on my computer was about the same because 
 To run this project, you might need to install the following tools in the 
 
 - FFMpeg (this is a command line tool, follow this [video](https://www.youtube.com/watch?v=JSrIABa0IwY) if you haven't installed)
-- Third-party Python libraries (``pip install numpy opencv-python scipy sounddevice pyqt6``)
+- Third-party Python libraries (``pip3 install numpy opencv-python scipy sounddevice pyqt6``)
 - VLC video player
 
 ## References
