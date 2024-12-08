@@ -301,7 +301,7 @@ class CriminalWall(QWidget):
         if self.debug_flag == True:
             self.open_video(f'debug_singing/singing_{self.user_name}.mp4') #if you want to change this name, you will need to change the filename in video_edit_reorder_module
         else:
-            self.open_video(f'full_singing/singing_{self.user_name}.mp4')
+            self.open_video(f'full_singing/singing_{self.user_name}.mp4') #TODO: timmy can you make this into a variable name and pass it to start_secret_video_edit() function
 
     # def show_final_panel_page(self):
     #     self.open_video("panel.mp4")
