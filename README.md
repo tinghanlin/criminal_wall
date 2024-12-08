@@ -8,8 +8,11 @@ rm -rf venv
 python3 -m venv venv
 
 source venv/bin/activate
-python3 main.py [user name]
+python3 main.py [user_name] [--debug] 
 ```
+
+Note: We designed a short debug mode. If you want to run that, use this command `python3 main.py timmy --debug`.
+Otherwise. If you want the full experience, use this command `python3 main.py timmy`.
 
 You might need to install some python packages. If so, you can run the following code:
 ```python
