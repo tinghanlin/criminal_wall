@@ -89,7 +89,7 @@ def group_psa(my_video):
     v3 = my_video[2].resize(height=180)  
     v4 = my_video[3].resize(height=180)  
     v5 = my_video[4].resize(height=180)
-    cropped_clip_top_left = my_video[5].crop(x1=0, y1=0, x2=(width/2), y2=(height/2))  
+    cropped_clip_top_left = my_video[5].crop(x1=0, y1=0, x2=(width/2), y2=(height/2)) #I think my_video[5] should be the current participant's video  
     v6 = cropped_clip_top_left.resize(height=180)
     cropped_clip_top_right = my_video[5].crop(x1=(width/2), y1=0, x2=width, y2=(height/2))   
     v7 = cropped_clip_top_right.resize(height=180)  
