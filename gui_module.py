@@ -20,9 +20,9 @@ import subprocess
 from video_record_module import video_record
 import time
 import os
+from video_edit_reorder_module import video_edit_to_sing
 
-
-# Background task for the GUI
+# background recording task for the GUI
 class SecretVideoRecord(QThread):
     finished = pyqtSignal()
 
@@ -52,13 +52,26 @@ class SecretVideoRecord(QThread):
         except Exception as e:
             print(f"Unexpected error during recording: {e}")
 
+# background video-editting task for the GUI
+class SecretVideoEdit(QThread):
+    finished = pyqtSignal()
+    
+    def __init__(self, user_name, debug_mode, parent=None):
+        super().__init__(parent)
+        self.user_name = user_name
+        self.debug_mode = debug_mode
+
+    def run(self):
+        video_edit_to_sing(self.user_name, self.debug_mode)
+        self.finished.emit()
 
 # The GUI
 class CriminalWall(QWidget):
-    def __init__(self, args):
+    def __init__(self, user_name, debug_flag, parent=None):
         super().__init__()
         self.setWindowTitle("Criminal Wall")
-        self.user_name = args[1]
+        self.user_name = user_name
+        self.debug_flag = debug_flag
 
         # Fonts
         self.title_font = QFont("Soleil", 60, QFont.Weight.Bold)
@@ -77,7 +90,7 @@ class CriminalWall(QWidget):
         self.current_bg = None
 
         # Variables for recording
-        self.video_length = 2
+        self.video_length = 2 #two seconds
         self.counter = 1
         self.video_filename = f"{self.user_name}/new_video_{self.counter}.mp4"
         self.audio_filename = f"{self.user_name}/new_audio_{self.counter}.wav"
@@ -85,7 +98,62 @@ class CriminalWall(QWidget):
 
         # Words for practice and testing
         self.practice_words = ["Bath", "Car", "Think"]
-        self.test_words = ["A", "B", "C"]
+
+        if debug_flag == True:
+            self.test_words = ["A", "B", "C"] #if you want to change this, make sure to also change the corresponding dictionary in video_edit_reorder_module.py
+        else:
+            self.test_words = [
+                "A",
+                "E",
+                "I",
+                "O",
+                "U",
+                "His",
+                "Hers",
+                "Its",
+                "Is",
+                "Was",
+                "As",
+                "Have",
+                "Had",
+                "For",
+                "And",
+                "If",
+                "Not",
+                "This",
+                "That",
+                "Join",
+                "Unite",
+                "Marry",
+                "Your",
+                "Fleece",
+                "Feather",
+                "Wind",
+                "Rain",
+                "Sun",
+                "Snow",
+                "What",
+                "Why",
+                "When",
+                "Where",
+                "Just",
+                "Justice",
+                "Silly",
+                "Fun",
+                "Little",
+                "Tiny",
+                "Beef",
+                "Lamb",
+                "Chicken",
+                "White",
+                "Black",
+                "Letter",
+                "Words",
+                "File",
+                "Data",
+                "Accountability",
+                "Responsibility"]
+        self.test_words_length = len(self.test_words)
         self.current_unit_index = 0
 
         # Open in full screen
@@ -173,7 +241,7 @@ class CriminalWall(QWidget):
 
         if not is_practice_round:
             test_round = self.current_unit_index + 1
-            round_label = QLabel(f"Test Round {test_round}/50", self)
+            round_label = QLabel(f"Test Round {test_round}/"+str(self.test_words_length), self)
             round_label.setFont(QFont("Soleil", 40, QFont.Weight.Bold))
             round_label.setStyleSheet("color: blue;")
             round_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
@@ -221,8 +289,8 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("background_wait.gif")
-        self.start_timer(10, self.show_wait_done_page)
-        #self.add_transparent_button(self.show_result_video)
+        self.start_timer(10, self.show_wait_done_page) #we just wait for 10 seconds to generate the video!
+        self.start_secret_video_edit(self.user_name, self.debug_flag)
 
     def show_wait_done_page(self):
         self.clear_layout()
@@ -230,8 +298,10 @@ class CriminalWall(QWidget):
         self.add_transparent_button(self.show_result_video)
 
     def show_result_video(self):
-        
-        self.open_video("singing.mp4")
+        if self.debug_flag == True:
+            self.open_video(f'debug_singing/singing_{self.user_name}.mp4') #if you want to change this name, you will need to change the filename in video_edit_reorder_module
+        else:
+            self.open_video(f'full_singing/singing_{self.user_name}.mp4')
 
     # def show_final_panel_page(self):
     #     self.open_video("panel.mp4")
@@ -292,6 +362,10 @@ class CriminalWall(QWidget):
         self.video_record_task = SecretVideoRecord(video_filename, audio_filename, video_length, combine_filename)
         self.video_record_task.finished.connect(self.update_next_video_name)
         self.video_record_task.start()
+
+    def start_secret_video_edit(self, user_name, debug_flag):
+        self.video_edit_task = SecretVideoEdit(user_name, debug_flag)
+        self.video_edit_task.start()
 
     def update_next_video_name(self):
         self.counter += 1

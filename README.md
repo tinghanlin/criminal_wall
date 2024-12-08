@@ -57,6 +57,9 @@ To run this project, you might need to install the following tools in the
 
 ## References
 
+### main.py
+- [How to use argparse?](https://docs.python.org/3/library/argparse.html)
+
 ### gui_module.py
 - [How to use PyQt's QThread to Prevent Freezing GUIs?](https://realpython.com/python-pyqt-qthread/)
 - [How to create your first app with PyQt6](https://www.pythonguis.com/tutorials/pyqt6-creating-your-first-window/)

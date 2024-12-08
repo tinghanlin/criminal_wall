@@ -1,5 +1,6 @@
-#run: python3 main.py [user name]
-#example: python3 main.py timmy
+#run: python3 main.py [user name] [--debug]
+#example: python3 main.py timmy 
+# Reference: https://docs.python.org/3/library/argparse.html
 from gui_module import CriminalWall
 import os
 import sounddevice as sd
@@ -8,15 +9,23 @@ from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLay
 import sys
 import glob
 import shutil
+import argparse
 
 if __name__ == "__main__":
-    #delete some files
-    #TODO: implement a way to delete files
-    # for file in glob.glob("new_*"): 
-    #     os.remove(file)
+    #use argparse to handle command line inputs
+    parser = argparse.ArgumentParser(description = "Ask Timmy how to run the code!")
+    parser.add_argument('user_name', type=str, help="A user name is required to create a database for that user")
+    parser.add_argument('--debug', action='store_true', help="If this optional flag is included, we will turn on the debug mode.")
+    args = parser.parse_args()
 
-    user_name = sys.argv[1]
+    if args.debug:
+        print("Debug mode is turned on")
+        debug_flag = True
+    else:
+        print("No debug mode")
+        debug_flag = False
 
+    user_name = args.user_name
 
     #delete an exisiting user folder
     if os.path.exists(user_name):
@@ -27,7 +36,7 @@ if __name__ == "__main__":
 
     #start the GUI
     app = QApplication(sys.argv)
-    window = CriminalWall(sys.argv)
+    window = CriminalWall(user_name, debug_flag)
     window.show()
     sys.exit(app.exec())
 
