@@ -26,7 +26,8 @@ deactivate
 
 ## System Overview
 
-![Frame 3 (1)](https://github.com/user-attachments/assets/635a40f0-92b3-4670-aa2f-ac17ec1c2efe)
+![Frame 3 (2)](https://github.com/user-attachments/assets/b86a6642-10c6-4275-84bd-b5579bec310b)
+
 
 ## Finetune and Troubleshoot
 
