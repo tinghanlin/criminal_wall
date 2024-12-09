@@ -57,13 +57,14 @@ class SecretVideoRecord(QThread):
 class SecretVideoEdit(QThread):
     finished = pyqtSignal()
     
-    def __init__(self, user_name, debug_mode, parent=None):
+    def __init__(self, user_name, debug_mode, file_name, parent=None):
         super().__init__(parent)
         self.user_name = user_name
         self.debug_mode = debug_mode
+        self.file_name = file_name
 
     def run(self):
-        video_edit_to_sing(self.user_name, self.debug_mode)
+        video_edit_to_sing(self.user_name, self.debug_mode, self.file_name)
         self.finished.emit()
 
 # The GUI
@@ -309,7 +310,12 @@ class CriminalWall(QWidget):
         self.set_background("background_wait.gif")
         
         self.start_timer(10, self.show_wait_done_page) #we just wait for 10 seconds to generate the video!
-        self.start_secret_video_edit(self.user_name, self.debug_flag)
+        if self.debug_flag == True:
+            self.file_name = f'debug_singing/singing_{self.user_name}.mp4'
+        else:
+            self.file_name = f'full_singing/singing_{self.user_name}.mp4'
+
+        self.start_secret_video_edit(self.user_name, self.debug_flag, self.file_name)
 
     def show_wait_done_page(self):
         self.clear_layout()
@@ -317,11 +323,7 @@ class CriminalWall(QWidget):
         self.add_transparent_button(self.show_result_video)
 
     def show_result_video(self):
-        if self.debug_flag == True:
-            self.open_video(f'debug_singing/singing_{self.user_name}.mp4') #if you want to change this name, you will need to change the filename in video_edit_reorder_module
-        else:
-            self.open_video(f'full_singing/singing_{self.user_name}.mp4') #TODO: timmy can you make this into a variable name and pass it to start_secret_video_edit() function
-
+        self.open_video(self.file_name)
         self.add_transparent_button(self.show_accent_prediction)
 
     def show_accent_prediction(self):
@@ -396,8 +398,8 @@ class CriminalWall(QWidget):
         self.video_record_task.finished.connect(self.update_next_video_name)
         self.video_record_task.start()
 
-    def start_secret_video_edit(self, user_name, debug_flag):
-        self.video_edit_task = SecretVideoEdit(user_name, debug_flag)
+    def start_secret_video_edit(self, user_name, debug_flag, file_name):
+        self.video_edit_task = SecretVideoEdit(user_name, debug_flag, file_name)
         self.video_edit_task.start()
 
     def update_next_video_name(self):

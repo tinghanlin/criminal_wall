@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-def video_edit_to_sing(user_name, debug_mode):
+def video_edit_to_sing(user_name, debug_mode, file_name):
     if debug_mode == True:
         
         debug_dictionary = {
@@ -41,7 +41,8 @@ def video_edit_to_sing(user_name, debug_mode):
             '-safe', '0',
             '-i', 'video_list_to_concatenate.txt',
             '-c', 'copy',
-            f'debug_singing/singing_{user_name}.mp4' #TODO: need to output this to a debugging folder
+            file_name
+            #f'debug_singing/singing_{user_name}.mp4' #TODO: need to output this to a debugging folder
         ]
 
         # run the command
@@ -134,7 +135,8 @@ def video_edit_to_sing(user_name, debug_mode):
             "-safe", "0",
             "-i", "video_list_to_concatenate.txt",
             "-c", "copy",
-            f"full_singing/singing_{user_name}.mp4" #TODO: need to output this to a normal test folder
+            file_name
+            #f"full_singing/singing_{user_name}.mp4" #TODO: need to output this to a normal test folder
         ]
 
         # run the command
