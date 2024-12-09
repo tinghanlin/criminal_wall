@@ -209,22 +209,22 @@ class CriminalWall(QWidget):
     # Pages
     def show_welcome_page(self):
         self.clear_layout()
-        self.set_background("1_landing_page.png")
+        self.set_background("assets/1_landing_page.png")
         self.add_transparent_button(self.show_instructions_page)
 
     def show_instructions_page(self):
         self.clear_layout()
-        self.set_background("2_instruction_page.png")
+        self.set_background("assets/2_instruction_page.png")
         self.add_transparent_button(self.show_audio_instructions_page)
 
     def show_audio_instructions_page(self):
         self.clear_layout()
-        self.set_background("3_audio_reception.png")
+        self.set_background("assets/3_audio_reception.png")
         self.add_transparent_button(self.show_practice_instructions_page)
     
     def show_practice_instructions_page(self):
         self.clear_layout()
-        self.set_background("4_pre_practice.png")
+        self.set_background("assets/4_pre_practice.png")
         self.add_transparent_button(self.start_practice_units)
 
     def start_practice_units(self):
@@ -235,7 +235,7 @@ class CriminalWall(QWidget):
     def finish_practice_units(self):
         """Finish practice units and show transition page."""
         self.clear_layout()
-        self.set_background("5_im_ready.png")
+        self.set_background("assets/5_im_ready.png")
         self.add_transparent_button(self.start_test_units)
 
     def start_test_units(self):
@@ -246,7 +246,7 @@ class CriminalWall(QWidget):
     def show_unit_page_with_gif(self, words, completion_callback, is_practice_round=True):
         """Show a single gif page with specific indicators for practice or test rounds."""
         self.clear_layout()
-        self.set_background("bgfullv3.gif")
+        self.set_background("assets/bgfullv3.gif")
 
         if is_practice_round:
             practice_round = self.current_unit_index + 1
@@ -307,7 +307,7 @@ class CriminalWall(QWidget):
 
     def show_wait_page(self):
         self.clear_layout()
-        self.set_background("background_wait.gif")
+        self.set_background("assets/background_wait.gif")
         
         self.start_timer(10, self.show_wait_done_page) #we just wait for 10 seconds to generate the video!
         if self.debug_flag == True:
@@ -319,7 +319,7 @@ class CriminalWall(QWidget):
 
     def show_wait_done_page(self):
         self.clear_layout()
-        self.set_background("6_done.png")
+        self.set_background("assets/6_done.png")
         self.add_transparent_button(self.show_result_video)
 
     def show_result_video(self):
@@ -332,7 +332,7 @@ class CriminalWall(QWidget):
 
     def show_accent_prediction(self):
         self.clear_layout()
-        self.set_background("7_end.png")
+        self.set_background("assets/7_end.png")
         random_accent_index = random.randint(1, len(self.list_of_accents))-1
         accent_label = QLabel(f"Thank you for participating!<br>We predict your accent is:<br>{self.list_of_accents[random_accent_index]}", self)
         accent_label.setFont(QFont("Soleil", 40, QFont.Weight.Bold))
