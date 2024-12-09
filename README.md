@@ -1,8 +1,10 @@
 # criminal_wall
 
-## How to run the code using the virtual environment?
+## How to run the code?
 
-Navigate to `criminal_wall` folder, and delete and recreate a venv by running the following code:
+Our code is designed to be run with a **MacOS** (e.g., 14-inch MacBook Pro Apple M3 Chip) that has pre-installed **FFMpeg** (a free multimedia framework for video/audio processing, conversion, and streaming) and **VLC** (a free, open-source media player supporting diverse formats and streaming). Typically, FFMpeg already exists in MacOS but VLC does not. To download VLC, click [here](https://www.videolan.org/vlc/). Once FFMpeg and VLC both exist in your MacOS, go through the following steps.
+
+Git close this repo and navigate to `criminal_wall` folder, and delete and recreate a venv by running the following code:
 ```python
 rm -rf venv
 python3 -m venv venv
@@ -50,14 +52,6 @@ in terms of storage (All things saved in the main directory (where the raw video
 Everything stored in the psa/ folder should be kept, that's where we store the multiple users in order to create the grid effect.
 in the end I used movie.py has it was easier to do the grid and provided two different scale versions let me know if I should switch to ffmpeg 
 The speed even with all the additions on my computer was about the same because it was before all the changes I made to Tommy's code so I assume it should still run at the same speed.
-
-## What to Install?
-
-To run this project, you might need to install the following tools in the 
-
-- FFMpeg
-- Third-party Python libraries (e.g., ``pip3 install numpy opencv-python scipy sounddevice pyqt6 moviepy==1.0.3``)
-- VLC video player
 
 ## References
 

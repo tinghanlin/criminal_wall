@@ -1,6 +1,6 @@
 import subprocess
 import os
-
+import time
 def video_edit_to_sing(user_name, debug_mode, file_name):
     if debug_mode == True:
         
@@ -32,21 +32,6 @@ def video_edit_to_sing(user_name, debug_mode, file_name):
                     raise FileNotFoundError(f"File {filename} ({debug_dictionary[num]}) not found")
 
                 f.write(f"file '{filename}'\n")
-
-        #concatenate the vidoes together into one video
-        command = [
-            'ffmpeg',
-            '-y',
-            '-f', 'concat',
-            '-safe', '0',
-            '-i', 'video_list_to_concatenate.txt',
-            '-c', 'copy',
-            file_name
-            #f'debug_singing/singing_{user_name}.mp4' #TODO: need to output this to a debugging folder
-        ]
-
-        # run the command
-        subprocess.run(command, check=True)
     else:
 
         dictionary = {
@@ -127,17 +112,68 @@ def video_edit_to_sing(user_name, debug_mode, file_name):
 
                 f.write(f"file '{filename}'\n")
 
-        #concatenate the vidoes together into one video
-        command = [
-            "ffmpeg",
-            "-y",
-            "-f", "concat",
-            "-safe", "0",
-            "-i", "video_list_to_concatenate.txt",
-            "-c", "copy",
-            file_name
-            #f"full_singing/singing_{user_name}.mp4" #TODO: need to output this to a normal test folder
-        ]
+    #concatenate the vidoes together into one video
+    command = [
+        "ffmpeg",
+        "-y",
+        "-f", "concat",
+        "-safe", "0",
+        "-i", "video_list_to_concatenate.txt",
+        "-c", "copy",
+        file_name
+    ]
 
-        # run the command
-        subprocess.run(command, check=True)
+    # run the command
+    subprocess.run(command, check=True)
+
+    # give the program some time generate the video
+    time.sleep(1)
+
+    if debug_mode == True:
+        text = "We are currently in debug mode!"
+    else:
+        text = "~~     Mary had a little lamb, little lamb, little lamb.     ~~\n~~ Mary had a little lamb, it's fleece as white as snow. ~~"
+    
+    fontfile = "SoleilRegular.otf"
+    font_color="white"
+    font_size=40
+    bottom_margin=10
+    
+    output_filename = file_name.replace("singing_", "subtitled_singing_")
+
+    #draw subtitles to video
+    command = [
+        "ffmpeg",
+        "-y",
+        "-i", file_name,
+        "-vf", f"drawtext=text='{text}':fontfile={fontfile}:fontcolor={font_color}:fontsize={font_size}:x=(w-text_w)/2:y=h-th-{bottom_margin}",
+        "-codec:a", "copy",
+        output_filename
+    ]
+
+    # run the command
+    subprocess.run(command, check=True)
+
+
+# def draw_labels_on_video(input_video_filename, output_video_filename):
+
+#     text = "~~     Mary had a little lamb, little lamb, little lamb.     ~~\n~~ Mary had a little lamb, it's fleece as white as snow. ~~"
+#     fontfile = "SoleilRegular.otf"
+#     font_color="white"
+#     font_size=40
+#     bottom_margin=10
+    
+#     #draw text to video
+#     command = [
+#         "ffmpeg",
+#         "-y",
+#         "-i", input_video_filename,
+#         "-vf", f"drawtext=text='{text}':fontfile={fontfile}:fontcolor={font_color}:fontsize={font_size}:x=(w-text_w)/2:y=h-th-{bottom_margin}",
+#         "-codec:a", "copy",
+#         output_video_filename
+#     ]
+
+#     # run the command
+#     subprocess.run(command, check=True)
+
+# draw_labels_on_video("full_singing/singing_timmy.mp4", "full_singing/singing_timmy_with_labels.mp4")

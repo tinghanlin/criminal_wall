@@ -323,7 +323,11 @@ class CriminalWall(QWidget):
         self.add_transparent_button(self.show_result_video)
 
     def show_result_video(self):
-        self.open_video(self.file_name)
+        if self.debug_flag == True:
+            self.open_video(f'debug_singing/subtitled_singing_{self.user_name}.mp4')
+        else:
+            self.open_video(f'full_singing/subtitled_singing_{self.user_name}.mp4')
+        
         self.add_transparent_button(self.show_accent_prediction)
 
     def show_accent_prediction(self):
