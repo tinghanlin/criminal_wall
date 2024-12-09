@@ -21,6 +21,7 @@ from video_record_module import video_record
 import time
 import os
 from video_edit_reorder_module import video_edit_to_sing
+import random
 
 # background recording task for the GUI
 class SecretVideoRecord(QThread):
@@ -162,6 +163,23 @@ class CriminalWall(QWidget):
 
         self.show_welcome_page()
 
+        self.list_of_accents = [
+            "General Northern (New York, Michigan)",
+            "New England (Boston, Maine)",
+            "Western New England (Vermont, New Hampshire)",
+            "General Midwestern (Ohio, Wisconsin, Michigan)",
+            "Chicago/Chicagoan",
+            "North-Central (Minnesota, Wisconsin)",
+            "General Southern (Texas, Georgia, Alabama, Carolinas)",
+            "Coastal Southern (Louisiana, Mississippi)",
+            "Texan",
+            "California (Southern California, Northern California)",
+            "Pacific Northwest (Washington, Oregon)",
+            "Southwestern (Arizona, New Mexico)",
+            "Appalachian English (Kentucky, West Virginia, Tennessee)",
+            "Mid-Atlantic (Philadelphia, Baltimore)"
+        ]
+
     def resizeEvent(self, event):
         """Handle window resize to ensure background scales."""
         self.bg_label.setGeometry(0, 0, self.width(), self.height())
@@ -289,6 +307,7 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("background_wait.gif")
+        
         self.start_timer(10, self.show_wait_done_page) #we just wait for 10 seconds to generate the video!
         self.start_secret_video_edit(self.user_name, self.debug_flag)
 
@@ -302,6 +321,20 @@ class CriminalWall(QWidget):
             self.open_video(f'debug_singing/singing_{self.user_name}.mp4') #if you want to change this name, you will need to change the filename in video_edit_reorder_module
         else:
             self.open_video(f'full_singing/singing_{self.user_name}.mp4') #TODO: timmy can you make this into a variable name and pass it to start_secret_video_edit() function
+
+        self.add_transparent_button(self.show_accent_prediction)
+
+    def show_accent_prediction(self):
+        self.clear_layout()
+        self.set_background("7_end.png")
+        random_accent_index = random.randint(1, len(self.list_of_accents))-1
+        accent_label = QLabel(f"Thank you for participating!<br>We predict your accent is:<br>{self.list_of_accents[random_accent_index]}", self)
+        accent_label.setFont(QFont("Soleil", 40, QFont.Weight.Bold))
+        accent_label.setStyleSheet("color: black;")
+        accent_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        accent_label.setGeometry(100, 400, 1200, 300)
+        accent_label.show()
+        self.dynamic_labels.append(accent_label)
 
     # def show_final_panel_page(self):
     #     self.open_video("panel.mp4")
