@@ -229,3 +229,5 @@ make_psa(output_path)
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("Time taken is: ", round(elapsed_time), " seconds!") # it takes 41 seconds to run this
+
+#TODO: implement a logic, so if there is not enough videos to make the psa, just skip the psa part and just combine the warning messages into a video
