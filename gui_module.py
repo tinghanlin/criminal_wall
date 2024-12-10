@@ -20,7 +20,7 @@ import subprocess
 from video_record_module import video_record
 import time
 import os
-from video_edit_reorder_module import video_edit_to_sing
+from video_edit_personal_module import triple_video_edit
 import random
 
 # background recording task for the GUI
@@ -57,14 +57,13 @@ class SecretVideoRecord(QThread):
 class SecretVideoEdit(QThread):
     finished = pyqtSignal()
     
-    def __init__(self, user_name, debug_mode, file_name, parent=None):
+    def __init__(self, user_name, debug_flag, parent=None):
         super().__init__(parent)
         self.user_name = user_name
-        self.debug_mode = debug_mode
-        self.file_name = file_name
+        self.debug_flag = debug_flag
 
     def run(self):
-        video_edit_to_sing(self.user_name, self.debug_mode, self.file_name)
+        triple_video_edit(self.user_name, self.debug_flag)
         self.finished.emit()
 
 # The GUI
@@ -102,7 +101,7 @@ class CriminalWall(QWidget):
         self.practice_words = ["Bath", "Car", "Think"]
 
         if debug_flag == True:
-            self.test_words = ["A", "B", "C"] #if you want to change this, make sure to also change the corresponding dictionary in video_edit_reorder_module.py
+            self.test_words = ["A", "E", "I"] #if you want to change this, make sure to also change the corresponding dictionary in video_edit_personal_module.py
         else:
             self.test_words = [
                 "A",
@@ -248,6 +247,9 @@ class CriminalWall(QWidget):
         self.clear_layout()
         self.set_background("assets/bgfullv3.gif")
 
+        #self.add_transparent_button(self.show_wait_page) #TODO: this block is added to debug, so please remove this line once finish debuging
+
+        ##TODO: this block is commented out to debug, so please remove once finish debuging
         if is_practice_round:
             practice_round = self.current_unit_index + 1
             round_label = QLabel(f"Practice Round {practice_round}/3", self)
@@ -297,6 +299,7 @@ class CriminalWall(QWidget):
 
         self.start_timer(6, lambda: self.show_next_word(words, completion_callback, is_practice_round))
         self.start_secret_video_record(self.video_filename, self.audio_filename, self.video_length, self.combine_filename)
+        ##TODO: this block is commented out to debug, so please remove once finish debuging
 
     def show_next_word(self, words, completion_callback, is_practice_round):
         self.current_unit_index += 1
@@ -308,14 +311,9 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("assets/background_wait.gif")
-        
         self.start_timer(10, self.show_wait_done_page) #we just wait for 10 seconds to generate the video!
-        if self.debug_flag == True:
-            self.file_name = f'debug_singing/singing_{self.user_name}.mp4'
-        else:
-            self.file_name = f'full_singing/singing_{self.user_name}.mp4'
-
-        self.start_secret_video_edit(self.user_name, self.debug_flag, self.file_name)
+        self.start_secret_triple_video_edit(self.user_name, self.debug_flag)
+    
 
     def show_wait_done_page(self):
         self.clear_layout()
@@ -324,9 +322,9 @@ class CriminalWall(QWidget):
 
     def show_result_video(self):
         if self.debug_flag == True:
-            self.open_video(f'debug_singing/subtitled_singing_{self.user_name}.mp4')
+            self.open_video(f'debug/psa2_subtitled_{self.user_name}.mp4')
         else:
-            self.open_video(f'full_singing/subtitled_singing_{self.user_name}.mp4')
+            self.open_video(f'full_experience/psa2_subtitled_{self.user_name}.mp4') #TODO: need to string up the video instead of only playing psa2 for now
         
         self.add_transparent_button(self.show_accent_prediction)
 
@@ -341,9 +339,6 @@ class CriminalWall(QWidget):
         accent_label.setGeometry(100, 400, 1200, 300)
         accent_label.show()
         self.dynamic_labels.append(accent_label)
-
-    # def show_final_panel_page(self):
-    #     self.open_video("panel.mp4")
 
     def open_video(self, video_path):
         try:
@@ -402,9 +397,10 @@ class CriminalWall(QWidget):
         self.video_record_task.finished.connect(self.update_next_video_name)
         self.video_record_task.start()
 
-    def start_secret_video_edit(self, user_name, debug_flag, file_name):
-        self.video_edit_task = SecretVideoEdit(user_name, debug_flag, file_name)
-        self.video_edit_task.start()
+    def start_secret_triple_video_edit(self, user_name, debug_flag):
+        self.triple_video_edit_task = SecretVideoEdit(user_name, debug_flag)
+        
+        self.triple_video_edit_task.start()
 
     def update_next_video_name(self):
         self.counter += 1

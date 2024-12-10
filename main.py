@@ -27,13 +27,23 @@ if __name__ == "__main__":
 
     user_name = args.user_name
 
+    ##TODO: this block is commented out to debug, so please remove once finish debuging
     #delete an exisiting user folder
-    if os.path.exists(user_name):
-        shutil.rmtree(user_name)
+    if os.path.exists(user_name): 
+        shutil.rmtree(user_name) 
        
     #create a new user folder
     os.makedirs(user_name)
+    ##TODO: this block is commented out to debug
 
+    if not os.path.exists("debug"):
+        os.makedirs("debug")
+        print("Create debug folder")
+        
+    if not os.path.exists("full_experience"):
+        os.makedirs("full_experience")
+        print("Create full_experience folder")
+        
     #start the GUI
     app = QApplication(sys.argv)
     window = CriminalWall(user_name, debug_flag)
