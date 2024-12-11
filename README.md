@@ -1,6 +1,10 @@
 # criminal_wall
 
-## How to run the code?
+## Physical Setup Instructions
+
+This experience will be solely run on a MacOS laptop. Just place the laptop on a desk and ask the user to sit on a chair placed in front of the laptop.
+
+## How To Run The Code?
 
 Our code is designed to be run with a **MacOS** (e.g., 14-inch MacBook Pro Apple M3 Chip) that has pre-installed **FFMpeg** (a free multimedia framework for video/audio processing, conversion, and streaming) and **VLC** (a free, open-source media player supporting diverse formats and streaming). Typically, FFMpeg already exists in MacOS but VLC does not. To download VLC, click [here](https://www.videolan.org/vlc/). Once FFMpeg and VLC both exist in your MacOS, go through the following steps.
 
