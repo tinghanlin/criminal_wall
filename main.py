@@ -39,11 +39,43 @@ if __name__ == "__main__":
     if not os.path.exists("debug"):
         os.makedirs("debug")
         print("Create debug folder")
-        
+
+    if not os.path.exists("debug_psa1"):
+        os.makedirs("debug_psa1")
+        print("Create debug_psa1 folder")
+    
+    if not os.path.exists("debug_psa1_adjusted"):
+        os.makedirs("debug_psa1_adjusted")
+        print("Create debug_psa1_adjusted folder")
+    
+    if not os.path.exists("debug_psa2"):
+        os.makedirs("debug_psa2")
+        print("Create debug_psa2 folder")
+    
+    if not os.path.exists("debug_psa2_adjusted"):
+        os.makedirs("debug_psa2_adjusted")
+        print("Create debug_psa2_adjusted folder")   
+
     if not os.path.exists("full_experience"):
         os.makedirs("full_experience")
         print("Create full_experience folder")
-        
+
+    if not os.path.exists("full_experience_psa1"):
+        os.makedirs("full_experience_psa1")
+        print("Create full_experience_psa1 folder")
+
+    if not os.path.exists("full_experience_psa1_adjusted"):
+        os.makedirs("full_experience_psa1_adjusted")
+        print("Create full_experience_psa1_adjusted folder")
+    
+    if not os.path.exists("full_experience_psa2"):
+        os.makedirs("full_experience_psa2")
+        print("Create full_experience_psa2 folder")
+
+    if not os.path.exists("full_experience_psa2_adjusted"):
+        os.makedirs("full_experience_psa2_adjusted")
+        print("Create full_experience_psa2_adjusted folder")
+
     #start the GUI
     app = QApplication(sys.argv)
     window = CriminalWall(user_name, debug_flag)

@@ -1,3 +1,4 @@
-file 'timmy3/new_combined_6_no_silence_concat.mp4'
-file 'timmy3/new_combined_6_no_silence_concat.mp4'
-file 'timmy3/new_combined_6_no_silence_concat.mp4'
+file 'debug/sing_subtitled_timmy1_reencoded.mp4'
+file 'debug_psa1_subtitled_group_reencoded.mp4'
+file 'assets/warning_text_reencoded.mp4'
+file 'debug_psa2_subtitled_group_reencoded.mp4'

@@ -1,231 +1,438 @@
-import numpy as np
-from moviepy.editor import VideoFileClip, clips_array, concatenate_videoclips, ImageClip
+#Reference: https://www.fastpix.io/blog/how-to-resize-and-crop-videos-using-ffmpeg#:~:text=If%20you%20want%20to%20crop,to%20calculate%20the%20center%20coordinates.&text=This%20command%20crops%20a%20640x360,)%2F2%20as%20thestarting%20coordinates.
+#Reference: https://superuser.com/questions/650291/how-to-get-video-duration-in-seconds
 import subprocess
 import os
 import time
-from pathlib import Path
-import sys
-from os.path import exists, join, basename, splitext
-import numpy as np
 import glob
-import datetime
+import random
 
-def concat_with_ffmpeg(video_paths, output_path):
-    try:
-        with open('temp_inputs.txt', 'w') as f:
-            for path in video_paths:
-                escaped_path = path.replace("'", "'\\''")
-                f.write(f"file '{escaped_path}'\n")
-        
-        cmd = [
-            'ffmpeg',
-            '-f', 'concat',
-            '-safe', '0',
-            '-i', 'temp_inputs.txt',
-            '-c', 'copy',  
-            output_path,
-            '-y'  
-        ]
-        
-        print("Starting FFmpeg concatenation...")
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        
-        if result.returncode != 0:
-            print(f"Error: {result.stderr}")
-            raise Exception("FFmpeg concatenation failed")
-        
-        print("Concatenation successful!")
-        
-    finally:
-        if os.path.exists('temp_inputs.txt'):
-            os.remove('temp_inputs.txt')
+def top_left_video(input_filename, output_filename):
 
-def concat_with_moviepy(video_paths, output_path):
-    """
-    Alternative MoviePy method that handles audio differently.
-    """
+    ffmpeg_command = [
+    "ffmpeg",
+    "-i", input_filename,
+    "-y",
+    "-filter:v", 
+    "crop=iw/2:ih/2:0:0",
+    "-s", "1280x720",
+    output_filename
+    ]
+
+    subprocess.run(ffmpeg_command, check=True)
+
+def top_right_video(input_filename, output_filename):
+
+    ffmpeg_command = [
+    "ffmpeg",
+    "-i", input_filename,
+    "-y",
+    "-filter:v", 
+    "crop=iw/2:ih/2:iw/2:0",
+    "-s", "1280x720",
+    output_filename
+    ]
+
+    subprocess.run(ffmpeg_command, check=True)
+
+def bottom_left_video(input_filename, output_filename):
+
+    ffmpeg_command = [
+    "ffmpeg",
+    "-i", input_filename,
+    "-y",
+    "-filter:v", 
+    "crop=iw/2:ih/2:0:ih/2",
+    "-s", "1280x720",
+    output_filename
+    ]
+
+    subprocess.run(ffmpeg_command, check=True)
+
+def bottom_right_video(input_filename, output_filename):
+
+    ffmpeg_command = [
+    "ffmpeg",
+    "-i", input_filename,
+    "-y",
+    "-filter:v", 
+    "crop=iw/2:ih/2:iw/2:ih/2",
+    "-s", "1280x720",
+    output_filename
+    ]
+
+    subprocess.run(ffmpeg_command, check=True)
+
+#path_to_folder: stores all of the candidate videos
+def select_surrounding_videos(path_to_folder):
+    #assume we are going with 4x4 psa grid and the middle 4 is the current user
+    #we will need to select 12 surrounding videos
     clips = []
-    try:
-        for path in video_paths:
-            video = VideoFileClip(path, audio=True)
-            if video.audio is None:
-                print(f"Warning: No audio found in {path}")
-            clips.append(video)
-        
-        final_clip = concatenate_videoclips(
-            clips,
-            method="chain"
-        )
-        
-        print("Exporting video...")
-        final_clip.write_videofile(
-            output_path,
-            codec='libx264',
-            audio=True,
-            audio_codec='aac',
-            temp_audiofile="temp-audio.m4a",
-            remove_temp=True,
-            audio_fps=44100
-        )
-        
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        raise
+    files = glob.glob(f'{path_to_folder}/*') #path_to_folder can be full_experience_psa1/*
+    files.sort(key=os.path.getctime,reverse=True) # we are getting the latest videos
+    number_of_videos = len(files)
+    print("number_of_videos: ", number_of_videos)
+
+    if number_of_videos <= 12:
+        print("We have <= 12 videos!")
+        #fill up all the existing videos into the grid, and random fill up the remaining grids with the existing videos
+        for i in range(number_of_videos):
+            clips.append(files[i])
+
+        for i in range(12-number_of_videos):
+            clips.append(files[random.randint(0, number_of_videos-1)])
     
-    finally:
-        for clip in clips:
-            clip.close()
-        if 'final_clip' in locals():
-            final_clip.close()
-
-
-def group_psa(my_video):
-    my_video = VideoFileClip("timmy_output.mp4") #40 seconds
-    width, height = my_video.size
-    v1 = my_video[0].resize(height=180)   
-    v2 = my_video[1].resize(height=180)  
-    v3 = my_video[2].resize(height=180)  
-    v4 = my_video[3].resize(height=180)  
-    v5 = my_video[4].resize(height=180)
-    cropped_clip_top_left = my_video[5].crop(x1=0, y1=0, x2=(width/2), y2=(height/2)) #I think my_video[5] should be the current participant's video  
-    v6 = cropped_clip_top_left.resize(height=180)
-    cropped_clip_top_right = my_video[5].crop(x1=(width/2), y1=0, x2=width, y2=(height/2))   
-    v7 = cropped_clip_top_right.resize(height=180)  
-    v8 = my_video[7].resize(height=180)  
-    v9 = my_video[8].resize(height=180)  
-    cropped_clip_bottom_left = my_video[5].crop(x1=0, y1=(height/2), x2=(width/2), y2=height)  
-    v10 = cropped_clip_bottom_left.resize(height=180)  
-    cropped_clip_bottom_right = my_video[5].crop(x1=(width/2), y1=(height/2), x2=width, y2=height) 
-    v11 = cropped_clip_bottom_right.resize(height=180)  
-    v12 = my_video[9].resize(height=180)  
-    v13 = my_video[10].resize(height=180)  
-    v14 = my_video[11].resize(height=180)  
-    v15 = my_video[12].resize(height=180)  
-    v16 = my_video[13].resize(height=180)
-
-    # you might need some code here to make sure all videos are the same length
-    my_video_array = clips_array([
-        [v1, v2, v3, v4],
-        [v5, v6, v7, v8],
-        [v9, v10, v11, v12],
-        [v13, v14, v15, v16]
-    ])
-    return my_video_array
-
-
-def larger_psa(my_video):
-    width, height = my_video[0].size
-    v1 = my_video[1].resize(height=115)
-    v2 = my_video[2].resize(height=115)
-    v3 = my_video[3].resize(height=115)
-    v4 = my_video[4].resize(height=115)
-    v5 = my_video[5].resize(height=115)
-    v6 = my_video[6].resize(height=115)
-    v7 = my_video[7].resize(height=115)
-    v8 = my_video[8].resize(height=115)
-    cropped_clip_top_left = my_video[0].crop(x1=0, y1=0, x2=(width/2), y2=(height/2))  
-    v9 = cropped_clip_top_left.resize(height=115)
-    cropped_clip_top_right = my_video[0].crop(x1=(width/2), y1=0, x2=width, y2=(height/2))   
-    v10 = cropped_clip_top_right.resize(height=115) 
-    v11 = my_video[9].resize(height=115)
-    v12 = my_video[10].resize(height=115)
-    v13 = my_video[11].resize(height=115)
-    v14 = my_video[12].resize(height=115)
-    cropped_clip_bottom_left = my_video[0].crop(x1=0, y1=(height/2), x2=(width/2), y2=height)  
-    v15 = cropped_clip_bottom_left.resize(height=115) 
-    cropped_clip_bottom_right = my_video[0].crop(x1=(width/2), y1=(height/2), x2=width, y2=height) 
-    v16 = cropped_clip_bottom_right .resize(height=115) 
-    v17 = my_video[13].resize(height=115)
-    v18 = my_video[14].resize(height=115) #.crop(x1 = cell[1][0][0],y1 = cell[0][0][1],x2 = cell[0][1][0],y2 = cell[0][1][1])
-    v19 = my_video[15].resize(height=115)
-    v20 = my_video[16].resize(height=115)
-    v21 = my_video[17].resize(height=115)
-    v22 = my_video[18].resize(height=115)
-    v23 = my_video[19].resize(height=115)
-    v24 = my_video[20].resize(height=115)
-
-    my_video_array = clips_array([
-        [v1, v2, v3, v4, v5, v6],
-        [v7,v8, v9, v10, v11, v12],
-        [v13, v14, v15, v16, v17, v18],
-        [v19, v20, v21, v22, v23, v24]
-    ])
-    return my_video_array
-
-def make_deep_audio(audio_training,output_path):
-
-
-    # 90 percent this works but it fails becuase im on Unbutu will work on mac i think?
-
-    #concat_with_ffmpeg(audio_training, "temp_audio_training_.mp4")
-    #cmd = f"ffmpeg -i temp_audio_training_.mp4 -b:a 192K -vn audio_person_training.wav"
-    #subprocess.run(cmd, capture_output=True, text=True)
-    audio_psa("audio_person_training.wav",output_path)
-    return 0
+    else: #number of videos > 12
+        print("We have more than videos!")
+        #picking the latest 12 videos (excluding the current user)
+        for i in range(12):
+            
+            clips.append(files[i+1]) #we do +1 because we want to exclude the current user's video being in the surrounding videos
     
-def make_psa(out_path):
-    #TODO: what happens when we don't have enough videos?
-    files = glob.glob('psa/1_part_psa_vids*')
-    files.sort(key=os.path.getctime, reverse=True)  # we are getting the latest videos
-    files_2 = glob.glob('psa/2_part_psa_vids*')
-    files_2.sort(key=os.path.getctime, reverse=True) # we are getting the latest videos
-    clips_1 = []
-    clips_2 = []
+    print("Here are your clips: ", clips)
+    print("Length of the clips: ", len(clips))
+        
+    return clips
+    
+def get_video_length_in_seconds(center_video_filename):
+    ffprobe_command = [
+        "ffprobe",
+        "-v", "error",
+        "-select_streams", "v:0",
+        "-show_entries", "stream=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1",
+        center_video_filename
+    ]
 
-    for i in range(21):
-        clips_1.append(VideoFileClip(files[i]))
-        print("file name is", files[i])
-        clips_2.append(VideoFileClip(files_2[i]))
+    result = subprocess.run(ffprobe_command, capture_output=True, text=True)
+    #print("Return code:", result.returncode)
+    print("Output:", result.stdout)
+    #print("Error:", result.stderr)
+    video_length_in_seconds =  result.stdout
+    
+    return float(video_length_in_seconds)
+    
+def adjust_videos_to_center_video_length(path_to_folder, center_video_filename):
 
+    files = glob.glob(f"{path_to_folder}/*") #path_to_folder can be full_experience_psa1/*
+    number_of_videos = len(files)
+    print("files: ", files)
 
-    frist_st_part = larger_psa(clips_1)
-    second_nd_part_psa =  larger_psa(clips_2)
-    word_pt_1 = ImageClip("assets/psa_word_pt_1.png").set_duration(5) #TODO: change the number of seconds here!
-    word_pt_2 = ImageClip("assets/psa_word_pt_2.png").set_duration(5) #TODO: change the number of seconds here!
-    clips = [frist_st_part,word_pt_1,word_pt_2 , second_nd_part_psa]
-    concat_clip = concatenate_videoclips(clips, method="compose")
-    concat_clip.write_videofile(out_path, fps=24)
+    center_video_length = get_video_length_in_seconds(center_video_filename)
 
+    for side_video_filename in files:
+        side_video_length = get_video_length_in_seconds(side_video_filename)
+        print("side_video_filename: ", side_video_filename)
+        parts = side_video_filename.split("/")
+        output_filename = parts[1]
+    
+        if side_video_length >= center_video_length:
+            #this side video is too long, so we need to truncate it
+            print("Side video is too long!")
+            ffmpeg_command = [
+                "ffmpeg",
+                "-i", side_video_filename,
+                "-y",
+                "-t", str(center_video_length),
+                "-c:v", "libx264", "-c:a", "aac", 
+                f"{path_to_folder}_adjusted/{output_filename}"
+            ]
+            subprocess.run(ffmpeg_command, check=True)
+        else:
+            #this side video is too short, so we need to pad it such that it loops on itself a little bit more
+            print("Side video is too short!")
+            pad_time = str(center_video_length - side_video_length)
+            print("center_video_length is: ", center_video_length)
+            print("Extra pad time is: ", pad_time)
 
-#program starts here!!
-start_time = time.time()
+            ffmpeg_command = [
+                "ffmpeg",
+                "-i", side_video_filename,
+                "-y",
+                "-vf", f"tpad=stop_mode=clone:stop_duration={pad_time}",
+                "-t", str(center_video_length),
+                "-copyts",
+                "-c:v", "libx264", "-c:a", "aac",
+                f"{path_to_folder}_adjusted/{output_filename}"
+            ]
+            print("ffmpeg_command: ", ffmpeg_command)
+            subprocess.run(ffmpeg_command, check=True)
 
-# for the 1st part of psa ("What if this was not just for fun?"")
-video_paths = [
-"new_recordings/new_combined_30_no_silence_concat.mp4", 
-"new_recordings/new_combined_16_no_silence_concat.mp4",
-"new_recordings/new_combined_18_no_silence_concat.mp4", 
-"new_recordings/new_combined_10_no_silence_concat.mp4", 
-"new_recordings/new_combined_17_no_silence_concat.mp4", 
-"new_recordings/new_combined_34_no_silence_concat.mp4", 
-"new_recordings/new_combined_14_no_silence_concat.mp4", 
-"new_recordings/new_combined_37_no_silence_concat.mp4" ]
+def video_4x4(path_to_folder, top_left_filename, top_right_filename, bottom_left_filename, bottom_right_filename, output_filename):
+    #start the timer
+    start_time = time.time()
+    
+    clips = select_surrounding_videos(path_to_folder)
 
-output_path = f"psa/1_part_psa_vids{datetime.datetime.now()}.mp4"
-concat_with_moviepy(video_paths, output_path)
+    ffmpeg_command = [
+        "ffmpeg",
+        "-i", clips[0], #0
+        "-i", clips[1], #1
+        "-i", clips[2], #2
+        "-i", clips[3], #3
+        "-i", clips[4], #4
+        "-i", top_left_filename, #5 (top left)
+        "-i", top_right_filename, #6 (top right)
+        "-i", clips[5], #7 
+        "-i", clips[6], #8
+        "-i", bottom_left_filename, #9 (bottom left)
+        "-i", bottom_right_filename, #10 (bottom right)
+        "-i", clips[7], #11 
+        "-i", clips[8], #12
+        "-i", clips[9], #13
+        "-i", clips[10], #14
+        "-i", clips[11], #15
+        "-filter_complex", 
+        "[0:v][1:v][2:v][3:v]hstack=inputs=4[r1];"
+        "[4:v][5:v][6:v][7:v]hstack=inputs=4[r2];"
+        "[8:v][9:v][10:v][11:v]hstack=inputs=4[r3];"
+        "[12:v][13:v][14:v][15:v]hstack=inputs=4[r4];"
+        "[r1][r2][r3][r4]vstack=inputs=4[vout];"
+        "[0:a][1:a][2:a][3:a][4:a][5:a][6:a][7:a][8:a][9:a][10:a][11:a][12:a][13:a][14:a][15:a]amix=inputs=16:duration=longest[aout]",
+        "-map", "[vout]",
+        "-map", "[aout]",
+        "-y",
+        "-s", "1280x720",
+        output_filename
+    ]
+    
+    print("video_4x4 commands: ", ffmpeg_command)
+    subprocess.run(ffmpeg_command, check=True)
 
-# If ffmpeg is better
-#output_path = f"psa/1_part_psa_vids{datetime.datetime.now()}_2.mp4"
-#concat_with_ffmpeg(video_paths, output_path)
+    end_time = time.time()
+    elapsed_time = end_time - start_time
 
-# for the last part of psa ("Your words, your data, your responsibility")
-video_paths = [ 
-"new_recordings/new_combined_23_no_silence_concat.mp4",
-"new_recordings/new_combined_46_no_silence_concat.mp4",
-"new_recordings/new_combined_23_no_silence_concat.mp4",
-"new_recordings/new_combined_48_no_silence_concat.mp4",
-"new_recordings/new_combined_23_no_silence_concat.mp4",
-"new_recordings/new_combined_50_no_silence_concat.mp4"]
+    print("Time taken is: ", elapsed_time, " seconds!")
 
-output_path = f"psa/2_part_psa_vids{datetime.datetime.now()}.mp4"
-concat_with_moviepy(video_paths, output_path)
+#example usage: reencode_warning_text_video("assets/warning_text.mp4", "assets/warning_text_reencoded.mp4")
+def reencode_warning_text_video(input_filename, output_filename):
+    ffmpeg_command = [
+        "ffmpeg",
+        "-y",
+        "-i", input_filename,
+        "-c:v", "libx264",  
+        "-preset", "fast",
+        "-crf", "23",
+        "-r", "30",
+        "-c:a", "aac",
+        "-strict", "2",
+        output_filename
+    ]
+    subprocess.run(ffmpeg_command, check=True)
 
-# generate the group video
-output_path = f"psa_final_no_words.mp4"
-make_psa(output_path)
+def final_concatenation(user_name, debug_flag):
+    #let's re-encode all videos
+    #You can reencode warning_text.mp4 if you haven't done it yet
+    if debug_flag == True:
+        reencode_warning_text_video(f"debug/sing_subtitled_{user_name}.mp4", f"debug/sing_subtitled_{user_name}_reencoded.mp4")
+        reencode_warning_text_video("debug_psa1_subtitled_group.mp4", "debug_psa1_subtitled_group_reencoded.mp4")
+        reencode_warning_text_video("debug_psa2_subtitled_group.mp4", "debug_psa2_subtitled_group_reencoded.mp4")
+    else:
+        reencode_warning_text_video(f"full_experience/sing_subtitled_{user_name}.mp4", f"full_experience/sing_subtitled_{user_name}_reencoded.mp4")
+        reencode_warning_text_video("full_experience_psa1_subtitled_group.mp4", "full_experience_psa1_subtitled_group_reencoded.mp4")
+        reencode_warning_text_video("full_experience_psa2_subtitled_group.mp4", "full_experience_psa2_subtitled_group_reencoded.mp4")
 
-end_time = time.time()
-elapsed_time = end_time - start_time
-print("Time taken is: ", round(elapsed_time), " seconds!") # it takes 41 seconds to run this
+    #sing + group_psa1 + warning_message + group_psa2
+    with open('video_list_to_concatenate.txt', 'w') as f:
 
-#TODO: implement a logic, so if there is not enough videos to make the psa, just skip the psa part and just combine the warning messages into a video
+        if debug_flag == True:
+            f.write(f"file 'debug/sing_subtitled_{user_name}_reencoded.mp4'\n")
+            f.write(f"file 'debug_psa1_subtitled_group_reencoded.mp4'\n")
+            f.write(f"file 'assets/warning_text_reencoded.mp4'\n") #ok it looks like we need to re-coded the warning_text.mp4
+            f.write(f"file 'debug_psa2_subtitled_group_reencoded.mp4'\n")
+
+        else:
+            f.write(f"file 'full_experience/sing_subtitled_{user_name}_reencoded.mp4'\n")
+            f.write(f"file 'full_experience_psa1_subtitled_group_reencoded.mp4'\n")
+            f.write(f"file 'assets/warning_text_reencoded.mp4'\n")
+            f.write(f"file 'full_experience_psa2_subtitled_group_reencoded.mp4'\n")
+    
+    #concatenate the vidoes together into one video
+    command = [
+        "ffmpeg",
+        "-y",
+        "-f", "concat",
+        "-safe", "0",
+        "-i", "video_list_to_concatenate.txt",
+        "-c:v", "libx264",
+        "-c:a", "aac",
+        "final.mp4"
+    ]
+    print("final ffmpeg commands: ", command)
+    # run the command
+    subprocess.run(command, check=True)
+
+def video_edit_full(user_name, debug_flag):
+    start_time = time.time()
+
+    # debug_flag = True
+    # user_name = "timmy1"
+
+    if debug_flag == True:
+ 
+        #generate debug psa1
+        top_left_video(f"debug_psa1/psa1_{user_name}.mp4", f"debug/top_left_psa1_{user_name}.mp4")
+        top_right_video(f"debug_psa1/psa1_{user_name}.mp4", f"debug/top_right_psa1_{user_name}.mp4")
+        bottom_left_video(f"debug_psa1/psa1_{user_name}.mp4", f"debug/bottom_left_psa1_{user_name}.mp4")
+        bottom_right_video(f"debug_psa1/psa1_{user_name}.mp4", f"debug/bottom_right_psa1_{user_name}.mp4")
+        
+        #I will adjust all other surrounding videos to the video length of f"debug_psa1/psa1_{user_name}.mp4"
+        #we need to do this step because not all users have same the length for their psa1 and psa2
+        adjust_videos_to_center_video_length("debug_psa1", f"debug_psa1/psa1_{user_name}.mp4")
+        #TODO: Ideally, in debug_psa1, we don't want to select this user again
+        #after this step, inside of debug_psa1_adjusted folder, we will have the adjusted surrounding videos
+
+        video_4x4("debug_psa1_adjusted", 
+        f"debug/top_left_psa1_{user_name}.mp4", 
+        f"debug/top_right_psa1_{user_name}.mp4",
+        f"debug/bottom_left_psa1_{user_name}.mp4",
+        f"debug/bottom_right_psa1_{user_name}.mp4", 
+        "debug_psa1_group.mp4")
+
+        #add subtitles to psa1
+        psa1_video_subtitle = "~~ A A A ~~"
+        fontfile = "SoleilRegular.otf"
+        font_color="white"
+        font_size=40
+        bottom_margin=10
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i", "debug_psa1_group.mp4",
+            "-vf", f"drawtext=text='{psa1_video_subtitle}':fontfile={fontfile}:fontcolor={font_color}:fontsize={font_size}:x=(w-text_w)/2:y=h-th-{bottom_margin}",
+            "-codec:a", "copy",
+            "debug_psa1_subtitled_group.mp4"
+        ]
+
+        # run the command
+        subprocess.run(command, check=True)
+
+        #generate debug psa2
+        top_left_video(f"debug_psa2/psa2_{user_name}.mp4", f"debug/top_left_psa2_{user_name}.mp4")
+        top_right_video(f"debug_psa2/psa2_{user_name}.mp4", f"debug/top_right_psa2_{user_name}.mp4")
+        bottom_left_video(f"debug_psa2/psa2_{user_name}.mp4", f"debug/bottom_left_psa2_{user_name}.mp4")
+        bottom_right_video(f"debug_psa2/psa2_{user_name}.mp4", f"debug/bottom_right_psa2_{user_name}.mp4")
+
+        #I will adjust all other surrounding videos to the video length of f"debug_psa1/psa1_{user_name}.mp4"
+        #we need to do this step because not all users have same the length for their psa1 and psa2
+        adjust_videos_to_center_video_length("debug_psa2", f"debug_psa2/psa2_{user_name}.mp4")
+        #TODO: Ideally, in debug_psa2, we don't want to select this user again
+        #after this step, inside of debug_psa2_adjusted folder, we will have the adjusted surrounding videos
+
+        video_4x4("debug_psa2_adjusted", 
+        f"debug/top_left_psa2_{user_name}.mp4", 
+        f"debug/top_right_psa2_{user_name}.mp4",
+        f"debug/bottom_left_psa2_{user_name}.mp4",
+        f"debug/bottom_right_psa2_{user_name}.mp4", 
+        "debug_psa2_group.mp4")
+
+        #add subtitles to psa2
+        psa2_video_subtitle = "~~ I I I ~~"
+        fontfile = "SoleilRegular.otf"
+        font_color="white"
+        font_size=40
+        bottom_margin=10
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i", "debug_psa2_group.mp4",
+            "-vf", f"drawtext=text='{psa2_video_subtitle}':fontfile={fontfile}:fontcolor={font_color}:fontsize={font_size}:x=(w-text_w)/2:y=h-th-{bottom_margin}",
+            "-codec:a", "copy",
+            "debug_psa2_subtitled_group.mp4"
+        ]
+
+        # run the command
+        subprocess.run(command, check=True)
+
+        # this is the final step
+        final_concatenation(user_name, debug_flag)
+
+    else:
+
+        #generate full_experience psa1
+        top_left_video(f"full_experience_psa1/psa1_{user_name}.mp4", f"full_experience/top_left_psa1_{user_name}.mp4")
+        top_right_video(f"full_experience_psa1/psa1_{user_name}.mp4", f"full_experience/top_right_psa1_{user_name}.mp4")
+        bottom_left_video(f"full_experience_psa1/psa1_{user_name}.mp4", f"full_experience/bottom_left_psa1_{user_name}.mp4")
+        bottom_right_video(f"full_experience_psa1/psa1_{user_name}.mp4", f"full_experience/bottom_right_psa1_{user_name}.mp4")
+        
+        #I will adjust all other surrounding videos to the video length of f"full_experience_psa1/psa1_{user_name}.mp4"
+        #we need to do this step because not all users have same the length for their psa1 and psa2
+        adjust_videos_to_center_video_length("full_experience_psa1", f"full_experience_psa1/psa1_{user_name}.mp4")
+        #TODO: Ideally, in debug_psa1, we don't want to select this user again
+        #after this step, inside of full_experience_psa1_adjusted folder, we will have the adjusted surrounding videos
+
+        video_4x4("full_experience_psa1_adjusted",
+        f"full_experience/top_left_psa1_{user_name}.mp4", 
+        f"full_experience/top_right_psa1_{user_name}.mp4",
+        f"full_experience/bottom_left_psa1_{user_name}.mp4",
+        f"full_experience/bottom_right_psa1_{user_name}.mp4", 
+        "full_experience_psa1_group.mp4")
+
+        #add subtitles to psa1
+        psa1_video_subtitle = "~~ What if this was not just for fun? ~~"
+        fontfile = "SoleilRegular.otf"
+        font_color="white"
+        font_size=40
+        bottom_margin=10
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i", "full_experience_psa1_group.mp4",
+            "-vf", f"drawtext=text='{psa1_video_subtitle}':fontfile={fontfile}:fontcolor={font_color}:fontsize={font_size}:x=(w-text_w)/2:y=h-th-{bottom_margin}",
+            "-codec:a", "copy",
+            "full_experience_psa1_subtitled_group.mp4"
+        ]
+
+        # run the command
+        subprocess.run(command, check=True)
+
+        #generate full_experience psa2
+        top_left_video(f"full_experience_psa2/psa2_{user_name}.mp4", f"full_experience/top_left_psa2_{user_name}.mp4")
+        top_right_video(f"full_experience_psa2/psa2_{user_name}.mp4", f"full_experience/top_right_psa2_{user_name}.mp4")
+        bottom_left_video(f"full_experience_psa2/psa2_{user_name}.mp4", f"full_experience/bottom_left_psa2_{user_name}.mp4")
+        bottom_right_video(f"full_experience_psa2/psa2_{user_name}.mp4", f"full_experience/bottom_right_psa2_{user_name}.mp4")
+        
+        #I will adjust all other surrounding videos to the video length of f"full_experience_psa2/psa2_{user_name}.mp4"
+        #we need to do this step because not all users have same the length for their psa1 and psa2
+        adjust_videos_to_center_video_length("full_experience_psa2", f"full_experience_psa2/psa2_{user_name}.mp4")
+        #TODO: Ideally, in full_experience_psa2, we don't want to select this user again
+        #after this step, inside of full_experience_psa2_adjusted folder, we will have the adjusted surrounding videos
+
+        video_4x4("full_experience_psa2_adjusted", 
+        f"full_experience/top_left_psa2_{user_name}.mp4", 
+        f"full_experience/top_right_psa2_{user_name}.mp4",
+        f"full_experience/bottom_left_psa2_{user_name}.mp4",
+        f"full_experience/bottom_right_psa2_{user_name}.mp4", 
+        "full_experience_psa2_group.mp4")
+
+        #add subtitles to psa2
+        psa2_video_subtitle = "~~ Your words, your data, your responsibility ~~"
+        fontfile = "SoleilRegular.otf"
+        font_color="white"
+        font_size=40
+        bottom_margin=10
+
+        command = [
+            "ffmpeg",
+            "-y",
+            "-i", "full_experience_psa2_group.mp4",
+            "-vf", f"drawtext=text='{psa2_video_subtitle}':fontfile={fontfile}:fontcolor={font_color}:fontsize={font_size}:x=(w-text_w)/2:y=h-th-{bottom_margin}",
+            "-codec:a", "copy",
+            "full_experience_psa2_subtitled_group.mp4"
+        ]
+
+        # run the command
+        subprocess.run(command, check=True)
+
+        # this is the final step
+        final_concatenation(user_name, debug_flag)
+
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
+    print("Time taken is to run video_edit_full is: ", elapsed_time, " seconds!")
+   
+# if __name__ == "__main__":
+#     final_concatenation("timmy", True)

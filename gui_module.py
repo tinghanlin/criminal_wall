@@ -21,6 +21,7 @@ from video_record_module import video_record
 import time
 import os
 from video_edit_personal_module import triple_video_edit
+from video_edit_group_module import video_edit_full
 import random
 
 # background recording task for the GUI
@@ -63,7 +64,8 @@ class SecretVideoEdit(QThread):
         self.debug_flag = debug_flag
 
     def run(self):
-        triple_video_edit(self.user_name, self.debug_flag)
+        triple_video_edit(self.user_name, self.debug_flag) #for debug, it takes 0.40 seconds
+        video_edit_full(self.user_name, self.debug_flag) #for debug, it takes 9.49 seconds
         self.finished.emit()
 
 # The GUI
@@ -311,7 +313,7 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("assets/background_wait.gif")
-        self.start_timer(10, self.show_wait_done_page) #we just wait for 10 seconds to generate the video!
+        self.start_timer(20, self.show_wait_done_page) #we just wait for 20 seconds to generate the video!
         self.start_secret_triple_video_edit(self.user_name, self.debug_flag)
     
 
@@ -321,11 +323,7 @@ class CriminalWall(QWidget):
         self.add_transparent_button(self.show_result_video)
 
     def show_result_video(self):
-        if self.debug_flag == True:
-            self.open_video(f'debug/psa2_subtitled_{self.user_name}.mp4')
-        else:
-            self.open_video(f'full_experience/psa2_subtitled_{self.user_name}.mp4') #TODO: need to string up the video instead of only playing psa2 for now
-        
+        self.open_video("final.mp4")
         self.add_transparent_button(self.show_accent_prediction)
 
     def show_accent_prediction(self):
@@ -399,7 +397,6 @@ class CriminalWall(QWidget):
 
     def start_secret_triple_video_edit(self, user_name, debug_flag):
         self.triple_video_edit_task = SecretVideoEdit(user_name, debug_flag)
-        
         self.triple_video_edit_task.start()
 
     def update_next_video_name(self):
