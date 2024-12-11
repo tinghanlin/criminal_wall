@@ -26,6 +26,8 @@ Once you are done, you can deactivate the venv by running the following command
 deactivate
 ```
 
+If you can run the above code, but find that the webcam on the MacOS laptop constantly jumps to your IPhone's camera to record videos. You may want to disable continuity camera on your IPhone. If you don't know how to disable continuity camera on your IPhone, click [here](https://www.youtube.com/watch?v=Kopw8kTyc9c).
+
 ## System Overview
 
 ![Frame 3 (3)](https://github.com/user-attachments/assets/4bf17e67-3d27-49b7-b22c-a31ab93787cb)
