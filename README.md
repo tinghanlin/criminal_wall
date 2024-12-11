@@ -45,15 +45,6 @@ deactivate
 - **silence_threshold**: determine what counts as silence. For example, -30dB means we consider anything below -30dB as silence. In a noisy environment, we can potentially increase this threshold to a higher level like -50dB.
 - **silence_duration**: determine the minimal length of silence. For example, 0.1 means we only consider segments that are longer than 0.1 seconds as a silent segment.
 
-### PSA VIDEO - status
-I know Blaze wanted us experiment with deep fakes So I coded the PSA to include the "user's voice" Using an AI cloning package but on my computer in order to get the cloning package to work I had to downgrade to python 3.9 ( it says on the website it works with python 3.11 but I'm unsure if it's only 3.11 0  it wouldn't work with my Python and I'm on 3.11.0) Which required me to downgrade movie.py.
-(PSA.py  (Verson with deep fake)- runs on python 3.9)
-(PSA_no_words.py(Verson with no deep fake) - runs on python 3.11.5)
-in terms of storage (All things saved in the main directory (where the raw videos went) Can be deleted after each user )
-Everything stored in the psa/ folder should be kept, that's where we store the multiple users in order to create the grid effect.
-in the end I used movie.py has it was easier to do the grid and provided two different scale versions let me know if I should switch to ffmpeg 
-The speed even with all the additions on my computer was about the same because it was before all the changes I made to Tommy's code so I assume it should still run at the same speed.
-
 ## References
 
 ### main.py
@@ -80,3 +71,8 @@ The speed even with all the additions on my computer was about the same because 
 - [How to truncate video using ffmpeg?](https://stackoverflow.com/questions/18444194/cutting-multimedia-files-based-on-start-and-end-time-using-ffmpeg)
 - [How to remove the silent parts of a video using ffmpeg and Python?](https://www.youtube.com/watch?v=ak52RXKfDw8)
 - [How to concatenate video using ffmpeg?](https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg)
+
+### video_edit_group_module.py
+- [How to Resize and Crop Videos using FFmpeg?](https://www.fastpix.io/blog/how-to-resize-and-crop-videos-using-ffmpeg#:~:text=If%20you%20want%20to%20crop,to%20calculate%20the%20center%20coordinates.&text=This%20command%20crops%20a%20640x360,\)%2F2%20as%20thestarting%20coordinates.)
+- [How to get video duration in seconds?](https://superuser.com/questions/650291/how-to-get-video-duration-in-seconds)
+
