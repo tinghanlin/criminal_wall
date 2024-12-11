@@ -68,7 +68,7 @@ def select_surrounding_videos(path_to_folder):
     #we will need to select 12 surrounding videos
     clips = []
     files = glob.glob(f'{path_to_folder}/*') #path_to_folder can be full_experience_psa1/*
-    files.sort(key=os.path.getctime,reverse=True) # we are getting the latest videos
+    files.sort(key=os.path.getctime,reverse=True) # we are getting the latest videos ##this is not meaningful because all files are adjusted to match the center video length (meaning they all similar creation time)
     number_of_videos = len(files)
     print("number_of_videos: ", number_of_videos)
 
@@ -82,11 +82,10 @@ def select_surrounding_videos(path_to_folder):
             clips.append(files[random.randint(0, number_of_videos-1)])
     
     else: #number of videos > 12
-        print("We have more than videos!")
-        #picking the latest 12 videos (excluding the current user)
+        print("We have more than 12 videos!")
+        #pick 12 videos (excluding the current user) #TODO: future work needs to make sure to exclude the current user
         for i in range(12):
-            
-            clips.append(files[i+1]) #we do +1 because we want to exclude the current user's video being in the surrounding videos
+            clips.append(files[i+1]) #I do +1 to skip the current user
     
     print("Here are your clips: ", clips)
     print("Length of the clips: ", len(clips))
@@ -111,9 +110,12 @@ def get_video_length_in_seconds(center_video_filename):
     
     return float(video_length_in_seconds)
     
+#TODO: I think the current implementation will try to adjust all files in the folder
+#TODO: we need to solve this problem by allowing adjusted the latest 12 videos (excluding the current user)
 def adjust_videos_to_center_video_length(path_to_folder, center_video_filename):
 
     files = glob.glob(f"{path_to_folder}/*") #path_to_folder can be full_experience_psa1/*
+    files.sort(key=os.path.getctime, reverse=True)
     number_of_videos = len(files)
     print("files: ", files)
 

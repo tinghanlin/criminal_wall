@@ -313,7 +313,7 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("assets/background_wait.gif")
-        self.start_timer(20, self.show_wait_done_page) #we just wait for 20 seconds to generate the video!
+        self.start_timer(30, self.show_wait_done_page) #we just wait for 30 seconds to generate the video!
         self.start_secret_triple_video_edit(self.user_name, self.debug_flag)
     
 
