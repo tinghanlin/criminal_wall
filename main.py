@@ -10,6 +10,9 @@ import sys
 import glob
 import shutil
 import argparse
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 if __name__ == "__main__":
     #use argparse to handle command line inputs
@@ -77,13 +80,20 @@ if __name__ == "__main__":
         print("Create full_experience_psa2_adjusted folder")
 
     #start the GUI
-    app = QApplication(sys.argv)
-    window = CriminalWall(user_name, debug_flag)
-    window.show()
-    sys.exit(app.exec())
+    # app = QApplication(sys.argv)
+    # window = CriminalWall(user_name, debug_flag)
+    # window.show()
+    # sys.exit(app.exec())
 
     
+    try:
+        app = QApplication(sys.argv)
+        window = CriminalWall(user_name, debug_flag)
+        window.show()
+        sys.exit(app.exec())
 
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
     
     
 

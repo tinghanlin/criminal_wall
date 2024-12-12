@@ -6,24 +6,28 @@ This experience will be solely run on a MacOS laptop. Just place the laptop on a
 
 ## How To Run The Code?
 
-Our code is designed to be run with a **MacOS** (e.g., 14-inch MacBook Pro Apple M3 Chip) that has pre-installed **FFMpeg** (a free multimedia framework for video/audio processing, conversion, and streaming) and **VLC** (a free, open-source media player supporting diverse formats and streaming). Typically, FFMpeg already exists in MacOS but VLC does not. To download VLC, click [here](https://www.videolan.org/vlc/). Once FFMpeg and VLC both exist in your MacOS, go through the following steps.
+Our code is designed to be run with a **MacOS** (e.g., 14-inch MacBook Pro Apple M3 Chip) that has pre-installed **FFMpeg** (a free multimedia framework for video/audio processing, conversion, and streaming) and **VLC** (a free, open-source media player supporting diverse formats and streaming). Typically, FFMpeg already exists in MacOS but VLC does not. To download VLC, click [here](https://www.videolan.org/vlc/). Also, please ensure that your VLC is downloaded in your Applications. Once FFMpeg and VLC both exist in your MacOS, go through the following steps.
 
-Git close this repo and navigate to `criminal_wall` folder, and delete and recreate a venv by running the following code:
+Git clone this repo and navigate to `criminal_wall` folder on the terminal, and delete and recreate a virtual environment (venv) by running the following code:
 ```python
 rm -rf venv
 python3 -m venv venv
 
 source venv/bin/activate
+```
+
+If this is your first time running code in this repo, install these python packages and libraries by running the following code in your terminal:
+```python
+pip3 install numpy opencv-python scipy sounddevice pyqt6
+```
+
+Then, to launch the program, run the following code (e.g., `python3 main.py timmy`):
+```python
 python3 main.py [user_name] [--debug] 
 ```
+Note: We did design a short debug mode using an optional command line flag. If you want to run that, use this command `python3 main.py timmy --debug`.
 
-Note: We designed a short debug mode. If you want to run that, use this command `python3 main.py timmy --debug`.
-Otherwise. If you want the full experience, use this command `python3 main.py timmy`.
-
-You might need to install some python packages. If so, you can run the following code:
-```python
-pip3 install numpy opencv-python scipy sounddevice pyqt6 moviepy==1.0.3
-```
+Also, if this is your first time running code in this repo, your terminal might prompt you to give permission to use your camera and microphone. Please give permission access to both. If this does happen, please restart by re-running the program again.
 
 Once you are done, you can deactivate the venv by running the following command
 ```python
@@ -32,10 +36,14 @@ deactivate
 
 If you can run the above code, but find that the webcam on the MacOS laptop constantly jumps to your IPhone's camera to record videos. You may want to disable continuity camera on your IPhone. If you don't know how to disable continuity camera on your IPhone, click [here](https://www.youtube.com/watch?v=Kopw8kTyc9c).
 
+Often time this repo will be updated with new code, please git pull the latest code if you haven't tested with this repo for a while. If you are new to git pull, just navigate to `criminal_wall` folder on the terminal and run the following code:
+```python
+git pull
+```
+
 ## System Overview
 
 ![Frame 3 (3)](https://github.com/user-attachments/assets/4bf17e67-3d27-49b7-b22c-a31ab93787cb)
-
 
 
 ## Finetune and Troubleshoot

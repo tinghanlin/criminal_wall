@@ -1,16 +1,5 @@
-# originally named "mainqt.py"
 # Reference: https://realpython.com/python-pyqt-qthread/
 # Reference: https://www.pythonguis.com/tutorials/pyqt6-creating-your-first-window/
-
-# required: PyQt6 & VLC
-# in order to run - replace practice and test words with full list
-# insert path to your VLC within the open_video function
-# that should work! 
-# notes: final video and message must be ONE mp4 file. (results.mp4)
-# things to fix: update hanes gif for waiting page
-        
-# ADJUSTED SCRIPT BY CHARLOTTE FOR HER COMPUTER & FULL SCREEN
-
 import sys
 import cv2
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout
@@ -98,6 +87,7 @@ class CriminalWall(QWidget):
         self.video_filename = f"{self.user_name}/new_video_{self.counter}.mp4"
         self.audio_filename = f"{self.user_name}/new_audio_{self.counter}.wav"
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
+        self.wait_time_for_video_generation = 30
 
         # Words for practice and testing
         self.practice_words = ["Bath", "Car", "Think"]
@@ -313,7 +303,8 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("assets/background_wait.gif")
-        self.start_timer(30, self.show_wait_done_page) #we just wait for 30 seconds to generate the video!
+        # we are waiting here to generate the final video!
+        self.start_timer(self.wait_time_for_video_generation, self.show_wait_done_page)
         self.start_secret_triple_video_edit(self.user_name, self.debug_flag)
     
 
