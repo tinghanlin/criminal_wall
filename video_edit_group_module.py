@@ -68,7 +68,7 @@ def select_surrounding_videos(path_to_folder):
     #we will need to select 12 surrounding videos
     clips = []
     files = glob.glob(f'{path_to_folder}/*') #path_to_folder can be full_experience_psa1/*
-    files.sort(key=os.path.getctime,reverse=True) # we are getting the latest videos ##this is not meaningful because all files are adjusted to match the center video length (meaning they all similar creation time)
+    files.sort(key=os.path.getctime,reverse=True) # we are getting the latest videos
     number_of_videos = len(files)
     print("number_of_videos: ", number_of_videos)
 
@@ -83,12 +83,10 @@ def select_surrounding_videos(path_to_folder):
     
     else: #number of videos > 12
         print("We have more than 12 videos!")
-        #pick 12 videos (excluding the current user) #TODO: future work needs to make sure to exclude the current user
+        #pick 12 videos (excluding the current user)
         for i in range(12):
-            clips.append(files[i+1]) #I do +1 to skip the current user
-    
-    print("Here are your clips: ", clips)
-    print("Length of the clips: ", len(clips))
+            #since we already order the files by time, we can use +1 to skip the current user
+            clips.append(files[i+1]) 
         
     return clips
     
@@ -109,27 +107,29 @@ def get_video_length_in_seconds(center_video_filename):
     video_length_in_seconds =  result.stdout
     
     return float(video_length_in_seconds)
-    
-#TODO: I think the current implementation will try to adjust all files in the folder
-#TODO: we need to solve this problem by allowing adjusted the latest 12 videos (excluding the current user)
+
+"""
+TODO: The current implementation will try to adjust all files in the folder to match the 
+length of the current user's video. This means it will take more and more time to run this 
+program as we have more users experiencing our project. Future work will need to solve this problem.
+Perhaps, by only adjust the latest 12 videos (excluding the current user).
+"""
 def adjust_videos_to_center_video_length(path_to_folder, center_video_filename):
 
     files = glob.glob(f"{path_to_folder}/*") #path_to_folder can be full_experience_psa1/*
     files.sort(key=os.path.getctime, reverse=True)
     number_of_videos = len(files)
-    print("files: ", files)
 
     center_video_length = get_video_length_in_seconds(center_video_filename)
 
     for side_video_filename in files:
         side_video_length = get_video_length_in_seconds(side_video_filename)
-        print("side_video_filename: ", side_video_filename)
         parts = side_video_filename.split("/")
         output_filename = parts[1]
     
         if side_video_length >= center_video_length:
-            #this side video is too long, so we need to truncate it
-            print("Side video is too long!")
+            #this surrounding video is too long, so we need to truncate it
+            print("surrounding video is too long!")
             ffmpeg_command = [
                 "ffmpeg",
                 "-i", side_video_filename,
@@ -140,11 +140,9 @@ def adjust_videos_to_center_video_length(path_to_folder, center_video_filename):
             ]
             subprocess.run(ffmpeg_command, check=True)
         else:
-            #this side video is too short, so we need to pad it such that it loops on itself a little bit more
-            print("Side video is too short!")
+            #this surrounding video is too short, so we need to pad it such that it loops on itself a little bit more
+            print("surrounding video is too short!")
             pad_time = str(center_video_length - side_video_length)
-            print("center_video_length is: ", center_video_length)
-            print("Extra pad time is: ", pad_time)
 
             ffmpeg_command = [
                 "ffmpeg",
@@ -156,7 +154,6 @@ def adjust_videos_to_center_video_length(path_to_folder, center_video_filename):
                 "-c:v", "libx264", "-c:a", "aac",
                 f"{path_to_folder}_adjusted/{output_filename}"
             ]
-            print("ffmpeg_command: ", ffmpeg_command)
             subprocess.run(ffmpeg_command, check=True)
 
 def video_4x4(path_to_folder, top_left_filename, top_right_filename, bottom_left_filename, bottom_right_filename, output_filename):
@@ -196,8 +193,6 @@ def video_4x4(path_to_folder, top_left_filename, top_right_filename, bottom_left
         "-s", "1280x720",
         output_filename
     ]
-    
-    print("video_4x4 commands: ", ffmpeg_command)
     subprocess.run(ffmpeg_command, check=True)
 
     end_time = time.time()
@@ -205,8 +200,8 @@ def video_4x4(path_to_folder, top_left_filename, top_right_filename, bottom_left
 
     print("Time taken is: ", elapsed_time, " seconds!")
 
-#example usage: reencode_warning_text_video("assets/warning_text.mp4", "assets/warning_text_reencoded.mp4")
-def reencode_warning_text_video(input_filename, output_filename):
+#example usage: reencode_video("assets/warning_text.mp4", "assets/warning_text_reencoded.mp4")
+def reencode_video(input_filename, output_filename):
     ffmpeg_command = [
         "ffmpeg",
         "-y",
@@ -223,15 +218,15 @@ def reencode_warning_text_video(input_filename, output_filename):
 
 def final_concatenation(user_name, debug_flag):
     #let's re-encode all videos
-    #You can reencode warning_text.mp4 if you haven't done it yet
+    #You can also reencode warning_text.mp4 here if you haven't done it yet!
     if debug_flag == True:
-        reencode_warning_text_video(f"debug/sing_subtitled_{user_name}.mp4", f"debug/sing_subtitled_{user_name}_reencoded.mp4")
-        reencode_warning_text_video("debug_psa1_subtitled_group.mp4", "debug_psa1_subtitled_group_reencoded.mp4")
-        reencode_warning_text_video("debug_psa2_subtitled_group.mp4", "debug_psa2_subtitled_group_reencoded.mp4")
+        reencode_video(f"debug/sing_subtitled_{user_name}.mp4", f"debug/sing_subtitled_{user_name}_reencoded.mp4")
+        reencode_video("debug_psa1_subtitled_group.mp4", "debug_psa1_subtitled_group_reencoded.mp4")
+        reencode_video("debug_psa2_subtitled_group.mp4", "debug_psa2_subtitled_group_reencoded.mp4")
     else:
-        reencode_warning_text_video(f"full_experience/sing_subtitled_{user_name}.mp4", f"full_experience/sing_subtitled_{user_name}_reencoded.mp4")
-        reencode_warning_text_video("full_experience_psa1_subtitled_group.mp4", "full_experience_psa1_subtitled_group_reencoded.mp4")
-        reencode_warning_text_video("full_experience_psa2_subtitled_group.mp4", "full_experience_psa2_subtitled_group_reencoded.mp4")
+        reencode_video(f"full_experience/sing_subtitled_{user_name}.mp4", f"full_experience/sing_subtitled_{user_name}_reencoded.mp4")
+        reencode_video("full_experience_psa1_subtitled_group.mp4", "full_experience_psa1_subtitled_group_reencoded.mp4")
+        reencode_video("full_experience_psa2_subtitled_group.mp4", "full_experience_psa2_subtitled_group_reencoded.mp4")
 
     #sing + group_psa1 + warning_message + group_psa2
     with open('video_list_to_concatenate.txt', 'w') as f:
@@ -239,7 +234,7 @@ def final_concatenation(user_name, debug_flag):
         if debug_flag == True:
             f.write(f"file 'debug/sing_subtitled_{user_name}_reencoded.mp4'\n")
             f.write(f"file 'debug_psa1_subtitled_group_reencoded.mp4'\n")
-            f.write(f"file 'assets/warning_text_reencoded.mp4'\n") #ok it looks like we need to re-coded the warning_text.mp4
+            f.write(f"file 'assets/warning_text_reencoded.mp4'\n")
             f.write(f"file 'debug_psa2_subtitled_group_reencoded.mp4'\n")
 
         else:
@@ -266,9 +261,6 @@ def final_concatenation(user_name, debug_flag):
 def video_edit_full(user_name, debug_flag):
     start_time = time.time()
 
-    # debug_flag = True
-    # user_name = "timmy1"
-
     if debug_flag == True:
  
         #generate debug psa1
@@ -277,10 +269,9 @@ def video_edit_full(user_name, debug_flag):
         bottom_left_video(f"debug_psa1/psa1_{user_name}.mp4", f"debug/bottom_left_psa1_{user_name}.mp4")
         bottom_right_video(f"debug_psa1/psa1_{user_name}.mp4", f"debug/bottom_right_psa1_{user_name}.mp4")
         
-        #I will adjust all other surrounding videos to the video length of f"debug_psa1/psa1_{user_name}.mp4"
+        #adjust all other surrounding videos to the video length of f"debug_psa1/psa1_{user_name}.mp4"
         #we need to do this step because not all users have same the length for their psa1 and psa2
         adjust_videos_to_center_video_length("debug_psa1", f"debug_psa1/psa1_{user_name}.mp4")
-        #TODO: Ideally, in debug_psa1, we don't want to select this user again
         #after this step, inside of debug_psa1_adjusted folder, we will have the adjusted surrounding videos
 
         video_4x4("debug_psa1_adjusted", 
@@ -315,10 +306,9 @@ def video_edit_full(user_name, debug_flag):
         bottom_left_video(f"debug_psa2/psa2_{user_name}.mp4", f"debug/bottom_left_psa2_{user_name}.mp4")
         bottom_right_video(f"debug_psa2/psa2_{user_name}.mp4", f"debug/bottom_right_psa2_{user_name}.mp4")
 
-        #I will adjust all other surrounding videos to the video length of f"debug_psa1/psa1_{user_name}.mp4"
+        #adjust all other surrounding videos to the video length of f"debug_psa1/psa1_{user_name}.mp4"
         #we need to do this step because not all users have same the length for their psa1 and psa2
         adjust_videos_to_center_video_length("debug_psa2", f"debug_psa2/psa2_{user_name}.mp4")
-        #TODO: Ideally, in debug_psa2, we don't want to select this user again
         #after this step, inside of debug_psa2_adjusted folder, we will have the adjusted surrounding videos
 
         video_4x4("debug_psa2_adjusted", 
@@ -358,10 +348,9 @@ def video_edit_full(user_name, debug_flag):
         bottom_left_video(f"full_experience_psa1/psa1_{user_name}.mp4", f"full_experience/bottom_left_psa1_{user_name}.mp4")
         bottom_right_video(f"full_experience_psa1/psa1_{user_name}.mp4", f"full_experience/bottom_right_psa1_{user_name}.mp4")
         
-        #I will adjust all other surrounding videos to the video length of f"full_experience_psa1/psa1_{user_name}.mp4"
+        #adjust all other surrounding videos to the video length of f"full_experience_psa1/psa1_{user_name}.mp4"
         #we need to do this step because not all users have same the length for their psa1 and psa2
         adjust_videos_to_center_video_length("full_experience_psa1", f"full_experience_psa1/psa1_{user_name}.mp4")
-        #TODO: Ideally, in debug_psa1, we don't want to select this user again
         #after this step, inside of full_experience_psa1_adjusted folder, we will have the adjusted surrounding videos
 
         video_4x4("full_experience_psa1_adjusted",
@@ -396,10 +385,9 @@ def video_edit_full(user_name, debug_flag):
         bottom_left_video(f"full_experience_psa2/psa2_{user_name}.mp4", f"full_experience/bottom_left_psa2_{user_name}.mp4")
         bottom_right_video(f"full_experience_psa2/psa2_{user_name}.mp4", f"full_experience/bottom_right_psa2_{user_name}.mp4")
         
-        #I will adjust all other surrounding videos to the video length of f"full_experience_psa2/psa2_{user_name}.mp4"
+        #adjust all other surrounding videos to the video length of f"full_experience_psa2/psa2_{user_name}.mp4"
         #we need to do this step because not all users have same the length for their psa1 and psa2
         adjust_videos_to_center_video_length("full_experience_psa2", f"full_experience_psa2/psa2_{user_name}.mp4")
-        #TODO: Ideally, in full_experience_psa2, we don't want to select this user again
         #after this step, inside of full_experience_psa2_adjusted folder, we will have the adjusted surrounding videos
 
         video_4x4("full_experience_psa2_adjusted", 
@@ -433,8 +421,4 @@ def video_edit_full(user_name, debug_flag):
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-
     print("Time taken is to run video_edit_full is: ", elapsed_time, " seconds!")
-   
-# if __name__ == "__main__":
-#     final_concatenation("timmy", True)

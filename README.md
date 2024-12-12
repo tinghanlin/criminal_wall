@@ -52,13 +52,20 @@ git pull
 - **self.video_length**: how many seconds we are recording for each clip
 - **self.wait_time_for_video_generation**: how many seconds we will wait for generating the final video
 
-### audio_record_module.py
-- `sd.default.device = #`: during audio recording, sounddevice in Python will just choose a default microphone (usually MacBook's microphone is the default). If you want to change the source of the microphone, you can first `print(sd.query_devices())` and set `sd.default.device = #` to the index of that source of microphone.
-  
 ### video_record_module.py
 - **camera_index**: determine which camera to record. For example, 0 usually mean webcam for a MacBook.
 - **silence_threshold**: determine what counts as silence. For example, -30dB means we consider anything below -30dB as silence. In a noisy environment, we can potentially increase this threshold to a higher level like -50dB.
 - **silence_duration**: determine the minimal length of silence. For example, 0.1 means we only consider segments that are longer than 0.1 seconds as a silent segment.
+
+### audio_record_module.py
+- `sd.default.device = #`: during audio recording, sounddevice in Python will just choose a default microphone (usually MacBook's microphone is the default). If you want to change the source of the microphone, you can first `print(sd.query_devices())` and set `sd.default.device = #` to the index of that source of microphone.
+  
+### silence_detection_module.py
+- If a user did not speak in the video recording, our current implementation is to just keep the first 0.1 second for the video so the program won't crash.
+
+### video_edit_group_module.py
+- How did we select users to fill up the surrounding videos in the group video? If the current user is the first user for this experience, the surrounding videos will all be that user. If there are less than 12 past users, we first fill up all past users to the surrounding videos and randomly select past users to fill up the remaining spots. If there are more than 12 past users, we select the latest 12 users excluding the current user. 
+- If you want to include new media into the final video (e.g., updating the warning_text.mp4), you will need to call reencode_video() to re-encode it so that your new media will be able to be successfully concatenated by ffmpeg.
 
 ## References
 

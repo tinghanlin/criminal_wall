@@ -55,7 +55,7 @@ def slience_remove(video_filename, silence_threshold, silence_duration, video_le
         if silence_start_time_array_float[0] == 0.0 and silence_end_time_array_float[number_of_silence_segments-1] >= video_length:
             print("Case 1 (there is silence at the beginning and at the end of the video): we can just keep the voice intervals")
             if number_of_silence_segments == 1:
-                #TODO: If it is all silence, we just keep the first 0.1 second for now such that the program won't crash
+                #Note: If it is all silence, we just keep the first 0.1 second for now such that the program won't crash
                 print("all silence")
                 voice_start_time_array_float.append(0.0)
                 voice_end_time_array_float.append(0.1)

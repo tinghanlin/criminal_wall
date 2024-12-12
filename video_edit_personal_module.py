@@ -123,13 +123,6 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             # run the command
             subprocess.run(command, check=True)
 
-
-
-
-
-
-
-
     else:
 
         dictionary = {
@@ -300,8 +293,3 @@ def triple_video_edit(user_name, debug_flag):
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"Time taken for triple_video_edit is: {elapsed_time} seconds!")
-
-# if __name__ == "__main__":
-#     debug_flag = False
-#     user_name = "timmy"
-#     triple_video_edit(user_name, debug_flag)

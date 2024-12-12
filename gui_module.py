@@ -53,8 +53,10 @@ class SecretVideoEdit(QThread):
         self.debug_flag = debug_flag
 
     def run(self):
-        triple_video_edit(self.user_name, self.debug_flag) #for debug, it takes 0.40 seconds
-        video_edit_full(self.user_name, self.debug_flag) #for debug, it takes 9.49 seconds
+        #edit sing, psa1, psa2 video for the current user
+        triple_video_edit(self.user_name, self.debug_flag) 
+        #create group psa videos and combine the final video
+        video_edit_full(self.user_name, self.debug_flag)
         self.finished.emit()
 
 # The GUI
@@ -82,18 +84,24 @@ class CriminalWall(QWidget):
         self.current_bg = None
 
         # Variables for recording
+        ###TODO: we might want to adjust these in the future###
         self.video_length = 2 #two seconds
+        ###TODO: we might want to adjust these in the future###
         self.counter = 1
         self.video_filename = f"{self.user_name}/new_video_{self.counter}.mp4"
         self.audio_filename = f"{self.user_name}/new_audio_{self.counter}.wav"
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
+
+        ###TODO: we might want to adjust these in the future###
         self.wait_time_for_video_generation = 40
+        ###TODO: we might want to adjust these in the future###
 
         # Words for practice and testing
         self.practice_words = ["Bath", "Car", "Think"]
 
         if debug_flag == True:
-            self.test_words = ["A", "E", "I"] #if you want to change this, make sure to also change the corresponding dictionary in video_edit_personal_module.py
+            #if you want to change this, make sure to also change the corresponding dictionary in video_edit_personal_module.py
+            self.test_words = ["A", "E", "I"]
         else:
             self.test_words = [
                 "A",
@@ -155,6 +163,7 @@ class CriminalWall(QWidget):
 
         self.show_welcome_page()
 
+        #list of pre-coded accents
         self.list_of_accents = [
             "General Northern (New York, Michigan)",
             "New England (Boston, Maine)",
@@ -239,9 +248,6 @@ class CriminalWall(QWidget):
         self.clear_layout()
         self.set_background("assets/bgfullv3.gif")
 
-        #self.add_transparent_button(self.show_wait_page) #TODO: this block is added to debug, so please remove this line once finish debuging
-
-        ##TODO: this block is commented out to debug, so please remove once finish debuging
         if is_practice_round:
             practice_round = self.current_unit_index + 1
             round_label = QLabel(f"Practice Round {practice_round}/3", self)
@@ -289,9 +295,10 @@ class CriminalWall(QWidget):
         word_label.show()
         self.dynamic_labels.append(word_label)
 
+        #each word is 6 seconds of waiting, allowing background video recording to complete
         self.start_timer(6, lambda: self.show_next_word(words, completion_callback, is_practice_round))
         self.start_secret_video_record(self.video_filename, self.audio_filename, self.video_length, self.combine_filename)
-        ##TODO: this block is commented out to debug, so please remove once finish debuging
+
 
     def show_next_word(self, words, completion_callback, is_practice_round):
         self.current_unit_index += 1
@@ -303,6 +310,7 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("assets/background_wait.gif")
+        
         # we are waiting here to generate the final video!
         self.start_timer(self.wait_time_for_video_generation, self.show_wait_done_page)
         self.start_secret_triple_video_edit(self.user_name, self.debug_flag)

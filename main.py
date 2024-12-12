@@ -22,70 +22,41 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.debug:
-        print("Debug mode is turned on")
+        print("Debug mode")
         debug_flag = True
     else:
-        print("No debug mode")
+        print("Full experience mode")
         debug_flag = False
 
     user_name = args.user_name
 
-    ##TODO: this block is commented out to debug, so please remove once finish debuging
     #delete an exisiting user folder
     if os.path.exists(user_name): 
         shutil.rmtree(user_name) 
-       
+    
     #create a new user folder
     os.makedirs(user_name)
-    ##TODO: this block is commented out to debug
 
-    if not os.path.exists("debug"):
-        os.makedirs("debug")
-        print("Create debug folder")
+    #make sure necessary folders are all created
+    folders = [
+        "debug",
+        "debug_psa1",
+        "debug_psa1_adjusted",
+        "debug_psa2",
+        "debug_psa2_adjusted",
+        "full_experience",
+        "full_experience_psa1",
+        "full_experience_psa1_adjusted",
+        "full_experience_psa2",
+        "full_experience_psa2_adjusted"
+    ]
 
-    if not os.path.exists("debug_psa1"):
-        os.makedirs("debug_psa1")
-        print("Create debug_psa1 folder")
-    
-    if not os.path.exists("debug_psa1_adjusted"):
-        os.makedirs("debug_psa1_adjusted")
-        print("Create debug_psa1_adjusted folder")
-    
-    if not os.path.exists("debug_psa2"):
-        os.makedirs("debug_psa2")
-        print("Create debug_psa2 folder")
-    
-    if not os.path.exists("debug_psa2_adjusted"):
-        os.makedirs("debug_psa2_adjusted")
-        print("Create debug_psa2_adjusted folder")   
-
-    if not os.path.exists("full_experience"):
-        os.makedirs("full_experience")
-        print("Create full_experience folder")
-
-    if not os.path.exists("full_experience_psa1"):
-        os.makedirs("full_experience_psa1")
-        print("Create full_experience_psa1 folder")
-
-    if not os.path.exists("full_experience_psa1_adjusted"):
-        os.makedirs("full_experience_psa1_adjusted")
-        print("Create full_experience_psa1_adjusted folder")
-    
-    if not os.path.exists("full_experience_psa2"):
-        os.makedirs("full_experience_psa2")
-        print("Create full_experience_psa2 folder")
-
-    if not os.path.exists("full_experience_psa2_adjusted"):
-        os.makedirs("full_experience_psa2_adjusted")
-        print("Create full_experience_psa2_adjusted folder")
+    for folder in folders:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+            print(f"Created {folder} folder")
 
     #start the GUI
-    # app = QApplication(sys.argv)
-    # window = CriminalWall(user_name, debug_flag)
-    # window.show()
-    # sys.exit(app.exec())
-
-    
     try:
         app = QApplication(sys.argv)
         window = CriminalWall(user_name, debug_flag)
