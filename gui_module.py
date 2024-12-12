@@ -87,7 +87,7 @@ class CriminalWall(QWidget):
         self.video_filename = f"{self.user_name}/new_video_{self.counter}.mp4"
         self.audio_filename = f"{self.user_name}/new_audio_{self.counter}.wav"
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
-        self.wait_time_for_video_generation = 30
+        self.wait_time_for_video_generation = 40
 
         # Words for practice and testing
         self.practice_words = ["Bath", "Car", "Think"]

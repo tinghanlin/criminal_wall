@@ -185,7 +185,7 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             50: "File",
             51: "Data",
             52: "Accountability",
-            53: "Responsibility"
+            53: "Responsibility",
         }
 
         if type_of_message == "sing":
