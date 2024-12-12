@@ -18,6 +18,8 @@ def generate_video_list_to_concatenate(user_name, sequence, dictionary):
 
             f.write(f"file '{filename}'\n")
 
+    
+
 #type_of_message: sing, psa1, psa2
 #output_filename: re-ordered video without subtitles
 #subtitled_output_filename: re-ordered video with subtitles
@@ -46,14 +48,14 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             sequence = "6 5 4"
             generate_video_list_to_concatenate(user_name, sequence, debug_dictionary)
 
-            #concatenate the vidoes together into one video
+            #concatenate the videos together into one video
             command = [
                 "ffmpeg",
                 "-y",
                 "-f", "concat",
                 "-safe", "0",
                 "-i", "video_list_to_concatenate.txt",
-                "-c", "copy",
+                "-c:v", "libx264", "-c:a", "aac",
                 output_filename
             ]
 
@@ -87,14 +89,14 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             sequence = "4 4 4"
             generate_video_list_to_concatenate(user_name, sequence, debug_dictionary)
 
-            #concatenate the vidoes together into one video
+            #concatenate the videos together into one video
             command = [
                 "ffmpeg",
                 "-y",
                 "-f", "concat",
                 "-safe", "0",
                 "-i", "video_list_to_concatenate.txt",
-                "-c", "copy",
+                "-c:v", "libx264", "-c:a", "aac",
                 output_filename
             ]
 
@@ -109,14 +111,14 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             sequence = "6 6 6"
             generate_video_list_to_concatenate(user_name, sequence, debug_dictionary)
 
-            #concatenate the vidoes together into one video
+            #concatenate the videos together into one video
             command = [
                 "ffmpeg",
                 "-y",
                 "-f", "concat",
                 "-safe", "0",
                 "-i", "video_list_to_concatenate.txt",
-                "-c", "copy",
+                "-c:v", "libx264", "-c:a", "aac",
                 output_filename
             ]
 
@@ -193,14 +195,14 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             sequence = "25 16 4 41 44 41 44 41 44 25 16 4 41 44 11 27 14 46 14 32"
             generate_video_list_to_concatenate(user_name, sequence, dictionary)
 
-            #concatenate the vidoes together into one video
+            #concatenate the videos together into one video
             command = [
                 "ffmpeg",
                 "-y",
                 "-f", "concat",
                 "-safe", "0",
                 "-i", "video_list_to_concatenate.txt",
-                "-c", "copy",
+                "-c:v", "libx264", "-c:a", "aac",
                 output_filename
             ]
 
@@ -234,14 +236,14 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             sequence = "33 19 21 13 20 37 17 40"
             generate_video_list_to_concatenate(user_name, sequence, dictionary)
 
-            #concatenate the vidoes together into one video
+            #concatenate the videos together into one video
             command = [
                 "ffmpeg",
                 "-y",
                 "-f", "concat",
                 "-safe", "0",
                 "-i", "video_list_to_concatenate.txt",
-                "-c", "copy",
+                "-c:v", "libx264", "-c:a", "aac",
                 output_filename
             ]
 
@@ -256,14 +258,14 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             sequence = "26 49 26 51 26 53"
             generate_video_list_to_concatenate(user_name, sequence, dictionary)
 
-            #concatenate the vidoes together into one video
+            #concatenate the videos together into one video
             command = [
                 "ffmpeg",
                 "-y",
                 "-f", "concat",
                 "-safe", "0",
                 "-i", "video_list_to_concatenate.txt",
-                "-c", "copy",
+                "-c:v", "libx264", "-c:a", "aac",
                 output_filename
             ]
 

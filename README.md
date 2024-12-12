@@ -49,7 +49,7 @@ git pull
 ## Finetune and Troubleshoot
 
 ### main.py
-- We have been noticing some weird issues from python if we have multiple users' folders in which have same file names existing in the repo. Just to be save, please manually delete all users' folders before running a new user.
+- We have been noticing some weird issues from python (e.g., python quits itself) if we have multiple users' folders in which have same file names in the repo. Just to be save, please manually delete all users' folders before running a new user if that problem arises.
 
 ### gui_module.py
 - **self.video_length**: how many seconds we are recording for each clip

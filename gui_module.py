@@ -93,7 +93,7 @@ class CriminalWall(QWidget):
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
 
         ###TODO: we might want to adjust these in the future###
-        self.wait_time_for_video_generation = 40
+        self.wait_time_for_video_generation = 30
         ###TODO: we might want to adjust these in the future###
 
         # Words for practice and testing
@@ -294,10 +294,11 @@ class CriminalWall(QWidget):
         word_label.setGeometry(0, self.height() // 2 - 50, self.width(), 100)
         word_label.show()
         self.dynamic_labels.append(word_label)
-
-        #each word is 6 seconds of waiting, allowing background video recording to complete
-        self.start_timer(6, lambda: self.show_next_word(words, completion_callback, is_practice_round))
-        self.start_secret_video_record(self.video_filename, self.audio_filename, self.video_length, self.combine_filename)
+        
+        # start video recording and only show the next word when done
+        self.start_secret_video_record(self.video_filename, self.audio_filename, self.video_length, self.combine_filename,
+            lambda: self.show_next_word(words, completion_callback, is_practice_round))
+    
 
 
     def show_next_word(self, words, completion_callback, is_practice_round):
@@ -310,7 +311,7 @@ class CriminalWall(QWidget):
     def show_wait_page(self):
         self.clear_layout()
         self.set_background("assets/background_wait.gif")
-        
+
         # we are waiting here to generate the final video!
         self.start_timer(self.wait_time_for_video_generation, self.show_wait_done_page)
         self.start_secret_triple_video_edit(self.user_name, self.debug_flag)
@@ -389,9 +390,11 @@ class CriminalWall(QWidget):
         self.timer.start(seconds * 1000)
         print("gif is done playing!")
 
-    def start_secret_video_record(self, video_filename, audio_filename, video_length, combine_filename):
+    def start_secret_video_record(self, video_filename, audio_filename, video_length, combine_filename, do_this_when_done):
         self.video_record_task = SecretVideoRecord(video_filename, audio_filename, video_length, combine_filename)
         self.video_record_task.finished.connect(self.update_next_video_name)
+        self.video_record_task.finished.connect(self.wait_for_video_record_task)
+        self.video_record_task.finished.connect(do_this_when_done) #we will call the next step after this thread is done
         self.video_record_task.start()
 
     def start_secret_triple_video_edit(self, user_name, debug_flag):
@@ -403,3 +406,8 @@ class CriminalWall(QWidget):
         self.video_filename = f"{self.user_name}/new_video_{self.counter}.mp4"
         self.audio_filename = f"{self.user_name}/new_audio_{self.counter}.wav"
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
+    
+    def wait_for_video_record_task(self):
+        if self.video_record_task is not None:
+            self.video_record_task.wait()
+            self.video_record_task = None

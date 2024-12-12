@@ -1,4 +1,4 @@
-file 'full_experience/sing_subtitled_jay_reencoded.mp4'
-file 'full_experience_psa1_subtitled_group_reencoded.mp4'
+file 'debug/sing_subtitled_timo_reencoded.mp4'
+file 'debug_psa1_subtitled_group_reencoded.mp4'
 file 'assets/warning_text_reencoded.mp4'
-file 'full_experience_psa2_subtitled_group_reencoded.mp4'
+file 'debug_psa2_subtitled_group_reencoded.mp4'

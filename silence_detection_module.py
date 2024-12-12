@@ -158,7 +158,7 @@ def slience_remove(video_filename, silence_threshold, silence_duration, video_le
         "-y",
         "-f", "concat",
         "-i", FILENAME,
-        "-c", "copy",
+        "-c:v", "libx264", "-c:a", "aac", 
         CONCAT_FILENAME
     ]
 
