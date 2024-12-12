@@ -50,6 +50,7 @@ git pull
 
 ### gui_module.py
 - **self.video_length**: how many seconds we are recording for each clip
+- **self.wait_time_for_video_generation**: how many seconds we will wait for generating the final video
 
 ### audio_record_module.py
 - `sd.default.device = #`: during audio recording, sounddevice in Python will just choose a default microphone (usually MacBook's microphone is the default). If you want to change the source of the microphone, you can first `print(sd.query_devices())` and set `sd.default.device = #` to the index of that source of microphone.
@@ -85,6 +86,9 @@ git pull
 - [How to truncate video using ffmpeg?](https://stackoverflow.com/questions/18444194/cutting-multimedia-files-based-on-start-and-end-time-using-ffmpeg)
 - [How to remove the silent parts of a video using ffmpeg and Python?](https://www.youtube.com/watch?v=ak52RXKfDw8)
 - [How to concatenate video using ffmpeg?](https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg)
+
+### video_edit_personal_module.py
+- [How to draw text on video using ffmpeg?](https://stackoverflow.com/questions/17623676/text-on-video-ffmpeg)
 
 ### video_edit_group_module.py
 - [How to Resize and Crop Videos using FFmpeg?](https://www.fastpix.io/blog/how-to-resize-and-crop-videos-using-ffmpeg#:~:text=If%20you%20want%20to%20crop,to%20calculate%20the%20center%20coordinates.&text=This%20command%20crops%20a%20640x360,\)%2F2%20as%20thestarting%20coordinates.)

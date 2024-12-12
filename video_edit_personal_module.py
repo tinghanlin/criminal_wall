@@ -1,3 +1,4 @@
+#Reference: https://stackoverflow.com/questions/17623676/text-on-video-ffmpeg
 import subprocess
 import os
 import time
@@ -299,7 +300,7 @@ def triple_video_edit(user_name, debug_flag):
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"Time taken for triple_video_edit is: {elapsed_time} seconds!")
-    
+
 # if __name__ == "__main__":
 #     debug_flag = False
 #     user_name = "timmy"
