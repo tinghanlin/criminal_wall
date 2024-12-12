@@ -48,6 +48,9 @@ git pull
 
 ## Finetune and Troubleshoot
 
+### main.py
+- We have been noticing some weird issues from python if we have multiple users' folders in which have same file names existing in the repo. Just to be save, please manually delete all users' folders before running a new user.
+
 ### gui_module.py
 - **self.video_length**: how many seconds we are recording for each clip
 - **self.wait_time_for_video_generation**: how many seconds we will wait for generating the final video
