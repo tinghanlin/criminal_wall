@@ -29,23 +29,43 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
     start_time = time.time()
 
     if debug_flag == True:
-        
         debug_dictionary = {
             1: "Bath", #practice
             2: "Car", #practice
             3: "Think", #practice
-            4: "A",
-            5: "E",
-            6: "I",
+            4: "Snow",
+            5: "Little",
+            6: "Responsibility",
+            7: "Had",
+            8: "For",
+            9: "Its",
+            10: "What",
+            11: "Data",
+            12: "White",
+            13: "Marry",
+            14: "A",
+            15: "Fleece",
+            16: "Words",
+            17: "If",
+            18: "Fun",
+            19: "Lamb",
+            20: "This",
+            21: "Just",
+            22: "Your",
+            23: "Was",
+            24: "Not",
+            25: "As",
         }
 
         if type_of_message == "sing":
             #we only need to add subtitles for the singing part
             """
-            6 5 4
-            I E A
+            13 7 14 5 19 5 19 5 19 
+            Mary had a little lamb, little lamb, little lamb
+            13 7 14 5 19 9 15 25 12 25 4
+            Mary had a little lamb, it's fleece as white as snow
             """
-            sequence = "6 5 4"
+            sequence = "13 7 14 5 19 5 19 5 19 13 7 14 5 19 9 15 25 12 25 4"
             generate_video_list_to_concatenate(user_name, sequence, debug_dictionary)
 
             #concatenate the videos together into one video
@@ -63,7 +83,9 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             subprocess.run(command, check=True)
 
             #by the time you get here, ffmpeg is done, so we can directly draw subtitles to video
-            video_subtitle = "~~ I E A ~~"
+            #video_subtitle = "~~ I E A ~~"
+            video_subtitle = "~~     Mary had a little lamb, little lamb, little lamb.     ~~\n~~ Mary had a little lamb, it's fleece as white as snow. ~~"
+
             fontfile = "SoleilRegular.otf"
             font_color="white"
             font_size=40
@@ -83,10 +105,10 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
 
         elif type_of_message == "psa1":
             """
-            4 4 4
-            A A A
+            10 17 20 23 24 21 8 18
+            What if this was not just for fun?
             """
-            sequence = "4 4 4"
+            sequence = "10 17 20 23 24 21 8 18"
             generate_video_list_to_concatenate(user_name, sequence, debug_dictionary)
 
             #concatenate the videos together into one video
@@ -105,10 +127,10 @@ def video_edit(user_name, type_of_message, output_filename, subtitled_output_fil
             
         elif type_of_message == "psa2":
             """
-            6 6 6
-            I I I
+            22 16 22 11 22 6
+            Your words, your data, your responsibility
             """
-            sequence = "6 6 6"
+            sequence = "22 16 22 11 22 6"
             generate_video_list_to_concatenate(user_name, sequence, debug_dictionary)
 
             #concatenate the videos together into one video

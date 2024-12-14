@@ -282,7 +282,8 @@ def video_edit_full(user_name, debug_flag):
         "debug_psa1_group.mp4")
 
         #add subtitles to psa1
-        psa1_video_subtitle = "~~ A A A ~~"
+        #psa1_video_subtitle = "~~ A A A ~~"
+        psa1_video_subtitle = "~~ What if this was not just for fun? ~~"
         fontfile = "SoleilRegular.otf"
         font_color="white"
         font_size=40
@@ -319,7 +320,8 @@ def video_edit_full(user_name, debug_flag):
         "debug_psa2_group.mp4")
 
         #add subtitles to psa2
-        psa2_video_subtitle = "~~ I I I ~~"
+        #psa2_video_subtitle = "~~ I I I ~~"
+        psa2_video_subtitle = "~~ Your words, your data, your responsibility ~~"
         fontfile = "SoleilRegular.otf"
         font_color="white"
         font_size=40

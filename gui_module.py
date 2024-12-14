@@ -93,7 +93,7 @@ class CriminalWall(QWidget):
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
 
         ###TODO: we might want to adjust these in the future###
-        self.wait_time_for_video_generation = 30
+        self.wait_time_for_video_generation = 25
         ###TODO: we might want to adjust these in the future###
 
         # Words for practice and testing
@@ -101,7 +101,30 @@ class CriminalWall(QWidget):
 
         if debug_flag == True:
             #if you want to change this, make sure to also change the corresponding dictionary in video_edit_personal_module.py
-            self.test_words = ["A", "E", "I"]
+            self.test_words = [
+                "Snow",
+                "Little",
+                "Responsibility",
+                "Had",
+                "For",
+                "Its",
+                "What",
+                "Data",
+                "White",
+                "Marry",
+                "A",
+                "Fleece",
+                "Words",
+                "If",
+                "Fun",
+                "Lamb",
+                "This",
+                "Just",
+                "Your",
+                "Was",
+                "Not",
+                "As"
+            ]
         else:
             self.test_words = [
                 "A",
