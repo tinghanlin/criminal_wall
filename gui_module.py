@@ -93,7 +93,7 @@ class CriminalWall(QWidget):
         self.combine_filename = f"{self.user_name}/new_combined_{self.counter}.mp4"
 
         ###TODO: we might want to adjust these in the future###
-        self.wait_time_for_video_generation = 25
+        self.wait_time_for_video_generation = 30
         ###TODO: we might want to adjust these in the future###
 
         # Words for practice and testing
