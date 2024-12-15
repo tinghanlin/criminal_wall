@@ -1,8 +1,20 @@
 # criminal_wall
 
+![criminal_wall_teaser](https://github.com/user-attachments/assets/dd6a55a3-e985-44b6-bdb9-f932c78fd4c0)
+
+## Introduction
+
+The formal project name of this experience is **Between the Words**, created by Ting-Han (Timmy) Lin, Hanes Hsu, Charlotte Gilmore, Lade Tinubu, and Arlie Jackson.
+
+With the popularity of digital games, social media, and other data-sharing platforms, more and more individuals’ information is tracked and used without users being aware. Often, people give companies information about themselves without knowing how that data may be shared or sold to other parties. Our exhibit aims to draw attention to this privacy issue - that too often, individuals are convinced to provide data about themselves, in seemingly legitimate ways, which companies may take advantage of and misuse the data. 
+
+We captured this idea in our exhibit by creating a seemingly fun and lighthearted game, in a style inspired by the New York Times Dialect Quiz, to trick people into saying specific words. However, at the end of the experience, instead of using users’ data to guess their accent as we originally proposed, we reorganized and manipulated the recordings to make users appear to say silly things - in this case, the lyrics of Mary Had a Little Lamb. To conclude the experience, we presented users with this recording, as well as their likeness in a grid format with others’, to create a group announcement about data privacy. Our exhibit is particularly effective in that the “breach” of trust between users and data holders is revealed when it happens - we confront people at our exhibit right after their experience with the manipulated video. In the real world, people and their data are taken advantage of and may never know. 
+
+We essentially built our own camera app from scratch to record people’s video and audio, to accompany a graphical user interface we designed to lead users through our “game”. After individuals’ recordings are taken, our code removes the silence from both ends of the recordings to create smooth transitions between words, for when the recordings are concatenated to make sentences.
+
 ## Physical Setup Instructions
 
-This experience will be solely run on a MacOS laptop. Just place the laptop on a desk and ask the user to sit on a chair placed in front of the laptop.
+This experience will be conducted using a MacOS laptop. Simply set the laptop on a desk and have the user sit in a chair positioned directly in front of it. To prevent the user from noticing they are being recorded during the experience, cover the green indicator light next to the webcam with black tape.
 
 ## How To Run The Code?
 
