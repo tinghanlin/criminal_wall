@@ -43,8 +43,7 @@ git pull
 
 ## System Overview
 
-![Frame 3 (3)](https://github.com/user-attachments/assets/4bf17e67-3d27-49b7-b22c-a31ab93787cb)
-
+![system](https://github.com/user-attachments/assets/e1e323b6-91db-4426-a73f-7bba81c490f2)
 
 ## Finetune and Troubleshoot
 
