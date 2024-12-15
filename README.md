@@ -59,43 +59,43 @@ git pull
 
 ## Description of Important File and Folder Names
 
-### final.mp4
+#### final.mp4
 This file is the final concatenated video shown to the user at the end of the experience.
 
-### debug folder
+#### debug folder
 This folder stores all users' singing videos from the debug mode. 
 
-### debug_psa1 folder
+#### debug_psa1 folder
 This folder stores all users' first PSA videos from the debug mode.
 
-### debug_psa2 folder
+#### debug_psa2 folder
 This folder stores all users' second PSA videos from the debug mode.
 
-### debug_psa1_adjust folder
+#### debug_psa1_adjust folder
 This folder stores all users' first PSA videos that are adjusted to match the length of the current user's first PSA video from the debug mode. These videos are then used to generate the first group video.
 
-### debug_psa2_adjust folder
+#### debug_psa2_adjust folder
 This folder stores all users' second PSA videos that are adjusted to match the length of the current user's second PSA video from the debug mode. These videos are then used to generate the second group video.
 
-### full_experience folder
+#### full_experience folder
 This folder stores all users' singing videos from the full experience mode. 
 
-### full_experience_psa1 folder
+#### full_experience_psa1 folder
 This folder stores all users' first PSA videos from the full experience mode.
 
-### full_experience_psa2 folder
+#### full_experience_psa2 folder
 This folder stores all users' second PSA videos from the full experience mode.
 
-### full_experience_psa1_adjust folder
+#### full_experience_psa1_adjust folder
 This folder stores all users' first PSA videos that are adjusted to match the length of the current user's first PSA video from the full experience mode. These videos are then used to generate the first group video.
 
-### full_experience_psa2_adjust folder
+#### full_experience_psa2_adjust folder
 This folder stores all users' second PSA videos that are adjusted to match the length of the current user's second PSA video from the full experience mode. These videos are then used to generate the second group video.
 
-### [user_name] folder
+#### [user_name] folder
 This folder stores all videos of the user saying each word. 
 
-### assets folder
+#### assets folder
 This folder stores the necessary figures and gifs to create the GUI. It also contains a video of the warning text, which is included in the final video.
 
 ## Finetune and Troubleshoot
