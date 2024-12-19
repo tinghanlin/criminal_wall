@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The formal project name of this experience is **Between the Words**, created by Ting-Han (Timmy) Lin, Hanes Hsu, Charlotte Gilmore, Lade Tinubu, and Arlie Jackson.
+The formal project name of this experience is **Between the Words**, created by Ting-Han (Timmy) Lin, Hanes Hsu, Charlotte Gilmore, Lade Tinubu, and Arlie Jackson with equal contributions.
 
 With the popularity of digital games, social media, and other data-sharing platforms, more and more individuals’ information is tracked and used without users being aware. Often, people give companies information about themselves without knowing how that data may be shared or sold to other parties. Our exhibit aims to draw attention to this privacy issue - that too often, individuals are convinced to provide data about themselves, in seemingly legitimate ways, which companies may take advantage of and misuse the data. 
 
